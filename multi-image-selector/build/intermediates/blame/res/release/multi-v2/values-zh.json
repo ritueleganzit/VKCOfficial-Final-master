@@ -1,0 +1,48 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-zh/values-zh.xml",
+            "map": [
+                {
+                    "source": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/src/main/res/values-zh/strings.xml",
+                    "from": {
+                        "startLines": "5,8,9,1,4,3,12,11,10,13,14,6,2,7",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "225,372,432,17,164,110,607,551,489,668,739,273,66,319",
+                        "endColumns": "46,58,55,47,59,52,59,54,60,69,83,44,42,51",
+                        "endOffsets": "267,426,483,60,219,158,662,601,545,733,818,313,104,366"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,102,161,217,265,325,378,438,493,554,624,708,753,796",
+                        "endColumns": "46,58,55,47,59,52,59,54,60,69,83,44,42,51",
+                        "endOffsets": "97,156,212,260,320,373,433,488,549,619,703,748,791,843"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/values-zh/values-zh.xml",
+            "map": [
+                {
+                    "source": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/src/main/res/values-zh/strings.xml",
+                    "from": {
+                        "startLines": "5,8,9,1,4,3,12,11,10,13,14,6,2,7",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "225,372,432,17,164,110,607,551,489,668,739,273,66,319",
+                        "endColumns": "46,58,55,47,59,52,59,54,60,69,83,44,42,51",
+                        "endOffsets": "267,426,483,60,219,158,662,601,545,733,818,313,104,366"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,102,161,217,265,325,378,438,493,554,624,708,753,796",
+                        "endColumns": "46,58,55,47,59,52,59,54,60,69,83,44,42,51",
+                        "endOffsets": "97,156,212,260,320,373,433,488,549,619,703,748,791,843"
+                    }
+                }
+            ]
+        }
+    ]
+}

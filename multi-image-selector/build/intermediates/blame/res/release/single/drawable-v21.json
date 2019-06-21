@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/notification_action_background.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/9b964b2277146740b3067387503679b3/res/drawable-v21/notification_action_background.xml"
+    },
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/182acd372a1a714a458378585ddf843c/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/abc_list_divider_material.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/182acd372a1a714a458378585ddf843c/res/drawable-v21/abc_list_divider_material.xml"
+    },
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/abc_edit_text_material.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/182acd372a1a714a458378585ddf843c/res/drawable-v21/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/182acd372a1a714a458378585ddf843c/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/drawable-v21/abc_dialog_material_background.xml",
+        "source": "/Users/riturajan/.gradle/caches/transforms-2/files-2.1/182acd372a1a714a458378585ddf843c/res/drawable-v21/abc_dialog_material_background.xml"
+    }
+]

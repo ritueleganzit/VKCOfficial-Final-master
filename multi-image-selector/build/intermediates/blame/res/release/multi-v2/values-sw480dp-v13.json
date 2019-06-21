@@ -1,0 +1,48 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/res/merged/release/values-sw480dp-v13/values-sw480dp-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/src/main/res/values-sw480dp/dimens.xml",
+                    "from": {
+                        "startLines": "4,2,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "151,57,105",
+                        "endColumns": "52,46,44",
+                        "endOffsets": "199,99,145"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,108,155",
+                        "endColumns": "52,46,44",
+                        "endOffsets": "103,150,195"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-sw480dp-v13/values-sw480dp-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/riturajan/Downloads/VKCOfficial-master/multi-image-selector/src/main/res/values-sw480dp/dimens.xml",
+                    "from": {
+                        "startLines": "4,2,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "151,57,105",
+                        "endColumns": "52,46,44",
+                        "endOffsets": "199,99,145"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,108,155",
+                        "endColumns": "52,46,44",
+                        "endOffsets": "103,150,195"
+                    }
+                }
+            ]
+        }
+    ]
+}
