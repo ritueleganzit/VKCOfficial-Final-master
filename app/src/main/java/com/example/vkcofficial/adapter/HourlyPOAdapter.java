@@ -8,19 +8,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.vkcofficial.PendingPODetail;
 import com.example.vkcofficial.R;
+import com.example.vkcofficial.model.griddata.GridData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HourlyPOAdapter extends RecyclerView.Adapter<HourlyPOAdapter.MyViewHolder> {
 
-    ArrayList<String> campaigns;
+    List<GridData> campaigns;
     Context context;
     Activity activity;
 
-    public HourlyPOAdapter(ArrayList<String> campaigns, Context context) {
+    public HourlyPOAdapter(List<GridData> campaigns, Context context) {
         this.campaigns = campaigns;
         this.context = context;
         activity = (Activity) context;
@@ -38,18 +41,31 @@ public class HourlyPOAdapter extends RecyclerView.Adapter<HourlyPOAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
-
+GridData gridData=campaigns.get(i);
+holder.grid_value.setText(""+gridData.getGridValue());
+holder.scheduled_quantity.setText(""+gridData.getScheduledQuantity());
+holder.quality_produced.setText(""+gridData.getQualityProduced());
+holder.start_time.setText(""+gridData.getStartTime());
+holder.end_time.setText(""+gridData.getEndTime());
 
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return campaigns.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView grid_value,scheduled_quantity,quality_produced,start_time,end_time,complete;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            grid_value=itemView.findViewById(R.id.grid_value);
+            scheduled_quantity=itemView.findViewById(R.id.scheduled_quantity);
+            quality_produced=itemView.findViewById(R.id.quality_produced);
+            start_time=itemView.findViewById(R.id.start_time);
+            end_time=itemView.findViewById(R.id.end_time);
+            complete=itemView.findViewById(R.id.complete);
 
         }
     }

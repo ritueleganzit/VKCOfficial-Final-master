@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.vkcofficial.HomeActivity;
 import com.example.vkcofficial.R;
 
 /**
@@ -35,6 +36,9 @@ TextView notification,message;
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                notification.setBackgroundResource(R.drawable.transparentdark_bg);
+                message.setBackgroundResource(R.drawable.transparent_bg);
+
                 NotificationandMessage myPhotosFragment = new NotificationandMessage();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.containers, myPhotosFragment, "TAG")
@@ -45,6 +49,8 @@ TextView notification,message;
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                message.setBackgroundResource(R.drawable.transparentdark_bg);
+                notification.setBackgroundResource(R.drawable.transparent_bg);
                 MessageFragment myPhotosFragment = new MessageFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.containers, myPhotosFragment, "TAG")
@@ -57,9 +63,15 @@ TextView notification,message;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        HomeActivity.textTitle.setText("NOTIFICATION");
+
+        notification.setBackgroundResource(R.drawable.transparentdark_bg);
+        message.setBackgroundResource(R.drawable.transparent_bg);
         NotificationFragment myPhotosFragment = new NotificationFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containers, myPhotosFragment, "TAG")
                 .commit();
     }
+
+
 }

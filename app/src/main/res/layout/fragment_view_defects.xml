@@ -67,6 +67,9 @@
                             android:id="@+id/edstartdate"
                             android:singleLine="true"
                             android:imeOptions="actionNext"
+                            android:drawableRight="@drawable/ic_downarrow"
+
+                            android:focusable="false"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_height="wrap_content"
                             android:hint="SEARCH BY ARTICLE"
@@ -136,10 +139,11 @@
                 app:cardUseCompatPadding="true"
                 android:layout_below="@+id/heading">
                 <TextView
+                    android:id="@+id/foundrec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Found 3 Records"/>
+                    android:text="Found 0 Records"/>
 
             </android.support.v7.widget.CardView>
 

@@ -3,6 +3,7 @@ package com.example.vkcofficial;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,13 +28,27 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.vkcofficial.adapter.HourlyPOAdapter;
+import com.example.vkcofficial.api.RetrofitAPI;
+import com.example.vkcofficial.api.RetrofitInterface;
+import com.example.vkcofficial.api.uploadMultupleImage.CallAPiActivity;
+import com.example.vkcofficial.api.uploadMultupleImage.GetResponse;
+import com.example.vkcofficial.model.griddata.POGridResponse;
+import com.example.vkcofficial.util.UserLoggedInSession;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HourlyCompleteActivity extends AppCompatActivity {
     RecyclerView rc_hourly;
@@ -42,21 +57,37 @@ public class HourlyCompleteActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 201;
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 202;
     private ArrayList<String> mSelectPath;
+    UserLoggedInSession userLoggedInSession;
+    LinearLayout lin_nodata;
+    ArrayList<String> imagesList=new ArrayList<>();
 
+    CallAPiActivity callAPiActivity;
+    public static String URL_COMPLETE = "http://itechgaints.com/VKC-API/addDefect";
+    ProgressDialog progressDialog;
     ArrayList<String> imglist=new ArrayList<>();
     RecyclerView rc_image;
 
     ArrayList<String> str_photo_array=new ArrayList<>();
-    private String mediapath;
+    private String mediapath,txt_pur_doc_num,article,doc_date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hourly_complete);
         rc_hourly=findViewById(R.id.rc_hourly);
         hourlylin=findViewById(R.id.hourlylin);
+        lin_nodata = findViewById(R.id.lin_nodata);
+        txt_pur_doc_num = getIntent().getStringExtra("pur_doc_num");
+        article = getIntent().getStringExtra("article");
+        doc_date = getIntent().getStringExtra("doc_date");
+        callAPiActivity = new CallAPiActivity(HourlyCompleteActivity.this);
+        userLoggedInSession = new UserLoggedInSession(HourlyCompleteActivity.this);
+        progressDialog = new ProgressDialog(HourlyCompleteActivity.this);
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(HourlyCompleteActivity.this,LinearLayoutManager.VERTICAL,false);
         rc_hourly.setLayoutManager(layoutManager);
-        rc_hourly.setAdapter(new HourlyPOAdapter(arrayList,HourlyCompleteActivity.this));
+       //
         hourlylin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +110,10 @@ public class HourlyCompleteActivity extends AppCompatActivity {
 ok.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
+        //d.dismiss();
+        Log.d("afasghasd",txt_pur_doc_num+"   "+article+"   "+imglist);
+
+        addMarkCompleteDetail2();
         d.dismiss();
     }
 });
@@ -104,6 +139,7 @@ ok.setOnClickListener(new View.OnClickListener() {
                 onBackPressed();
             }
         });
+        pendingGrid();
     }
     @Override
     public void onBackPressed() {
@@ -112,6 +148,59 @@ ok.setOnClickListener(new View.OnClickListener() {
 
     }
 
+
+
+
+    public void addMarkCompleteDetail2(){
+
+        progressDialog.show();
+
+        HashMap<String, String> map = new HashMap<>();
+
+        map.put("pur_doc_num", txt_pur_doc_num);
+        map.put("article", article);
+
+        callAPiActivity.doPostWithFiles(HourlyCompleteActivity.this, map, URL_COMPLETE, mSelectPath, "image[]", new GetResponse() {
+
+            @Override
+            public void onSuccesResult(JSONObject result) throws JSONException {
+                progressDialog.dismiss();
+                String status = result.getString("status");
+                if (status.equalsIgnoreCase("1")) {
+
+                    Toast.makeText(HourlyCompleteActivity.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                    //PlanFragment myPhotosFragment = new PlanFragment();
+/*
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, myPhotosFragment, "TAG")
+                            .commit();*/
+                }
+                else
+                {
+                    Toast.makeText(HourlyCompleteActivity.this, ""+result.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+
+                Log.d("messageeeeeeeeeee", "succccccccessss" + status);
+            }
+
+            @Override
+            public void onFailureResult(JSONObject result) {
+                progressDialog.dismiss();
+                Toast.makeText(HourlyCompleteActivity.this, "Server or Internet Error"+result.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("messageeeeeeeeeee", result.toString());
+
+            }
+
+            @Override
+            public void onException(String message) {
+                progressDialog.dismiss();
+                Log.d("messageeeeeeeeeee", message);
+
+            }
+        });
+
+
+    }
     private void pickImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN // Permission was added in API Level 16
                 && ActivityCompat.checkSelfPermission(HourlyCompleteActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -122,8 +211,8 @@ ok.setOnClickListener(new View.OnClickListener() {
         } else {
 
             MultiImageSelector selector = MultiImageSelector.create(HourlyCompleteActivity.this);
-            selector.single();
-            // selector.count(6);
+            selector.multi();
+             selector.count(6);
             selector.showCamera(false);
 
             selector.origin(mSelectPath);
@@ -146,6 +235,42 @@ ok.setOnClickListener(new View.OnClickListener() {
         } else {
             ActivityCompat.requestPermissions(HourlyCompleteActivity.this, new String[]{permission}, requestCode);
         }
+    }
+
+    private void pendingGrid() {
+        progressDialog.show();
+        RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
+        Call<POGridResponse> call=myInterface.pendingGrid(txt_pur_doc_num,article,doc_date);
+        call.enqueue(new Callback<POGridResponse>() {
+            @Override
+            public void onResponse(Call<POGridResponse> call, Response<POGridResponse> response) {
+                if (response.isSuccessful())
+                {
+                    progressDialog.dismiss();
+                    if (response.body().getData()!=null)
+                    {
+                        lin_nodata.setVisibility(View.GONE);
+                        rc_hourly.setVisibility(View.VISIBLE);
+                        rc_hourly.setAdapter(new HourlyPOAdapter(response.body().getData(),HourlyCompleteActivity.this));
+
+
+                    }
+                    else {
+                        lin_nodata.setVisibility(View.VISIBLE);
+                        rc_hourly.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<POGridResponse> call, Throwable t) {
+
+                lin_nodata.setVisibility(View.VISIBLE);
+                rc_hourly.setVisibility(View.GONE);
+                Toast.makeText(HourlyCompleteActivity.this, "Server or Internet Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
     public class ImageAdapter extends RecyclerView.Adapter<HourlyCompleteActivity.ImageAdapter.ViewHolder>
     {
@@ -220,11 +345,12 @@ ok.setOnClickListener(new View.OnClickListener() {
 
 
                 mediapath = sb.toString().trim();
-                Log.d("LOG_TAG", "Selected Images 1.5" + mediapath);
+                Log.d("LOG_TAG", "Selected Images 1.5" + mSelectPath);
 
                 Log.d("mediapathhhhhhhh", "" + mediapath);
                 imglist.add(""+mediapath.trim());
-                rc_image.setAdapter(new HourlyCompleteActivity.ImageAdapter(imglist,HourlyCompleteActivity.this));
+
+                rc_image.setAdapter(new HourlyCompleteActivity.ImageAdapter(mSelectPath,HourlyCompleteActivity.this));
 
             }
         }

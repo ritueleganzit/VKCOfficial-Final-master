@@ -32,7 +32,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/lin_profile"
-                android:padding="5dp"
+                android:padding="10dp"
                 >
 
                 <TableRow android:layout_marginBottom="5dp">
@@ -56,7 +56,7 @@
                         android:id="@+id/vendor_name"
                         android:fontFamily="@font/poppins_regular"
                         android:ellipsize="end"
-                        android:text="Sun Stitching Works"
+                        android:text=""
                         />
 
 
@@ -77,7 +77,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="50"
-                        android:text="4500698223 "
+                        android:text=" "
                         android:gravity="end"
                         android:fontFamily="@font/poppins_regular"
 android:id="@+id/pur_doc_num"
@@ -103,7 +103,6 @@ android:id="@+id/pur_doc_num"
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="50"
-                    android:text="13916 Ladies Blk "
                     android:gravity="end"
                     android:fontFamily="@font/poppins_regular"
 android:id="@+id/article"
@@ -139,7 +138,6 @@ android:id="@+id/article"
 android:id="@+id/doc_date"
                         android:singleLine="true"
                         android:ellipsize="end"
-                        android:text="12/02/2019"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         />
 
@@ -168,7 +166,6 @@ android:id="@+id/doc_date"
 android:id="@+id/complete"
                         android:textColor="@color/colorPrimaryDark"
                         android:layout_weight="50"
-                        android:text="50%"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                         />
 
@@ -179,18 +176,20 @@ android:id="@+id/complete"
             </TableLayout>
 
 
-            <ImageView
-                android:id="@+id/lin_arrow"
 
-                android:background="@color/colorPrimaryDark"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-
-                android:layout_width="18dp"
+            <com.example.vkcofficial.util.VerticalTextView
+                android:id="@+id/txtRegister"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                />
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:rotation="180"
+                android:text="VIEW DETAILS"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="#FFFFFF"
+                android:visibility="visible" />
 
 
         </LinearLayout>

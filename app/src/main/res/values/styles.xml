@@ -24,6 +24,12 @@
         <!-- Support library compatibility -->
         <item name="windowActionBarOverlay">true</item>
     </style>
+
+    <style name="AlertDialogCustom" parent="@android:style/Animation.Dialog">
+        <item name="android:typeface">sans</item>
+
+
+    </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

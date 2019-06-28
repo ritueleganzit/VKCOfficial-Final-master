@@ -54,7 +54,11 @@
                         android:textColorHint="@color/gray"
                         android:backgroundTint="@color/gray"
                         android:inputType="date"
-                        android:id="@+id/edstartdate"
+
+                        android:id="@+id/vendor_name_ed"
+                        android:drawableRight="@drawable/ic_downarrow"
+
+                        android:focusable="false"
                         android:singleLine="true"
                         android:imeOptions="actionNext"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -94,17 +98,21 @@
                 </android.support.design.widget.TextInputLayout>
 
                <RadioGroup
+                   android:id="@+id/rg"
                    android:layout_marginTop="10dp"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:orientation="vertical">
                    <RadioButton
+                       android:checked="true"
+                       android:id="@+id/performance"
                        android:layout_width="wrap_content"
                        android:text="Performance Report"
                        android:textColor="@color/gray"
                        android:layout_height="wrap_content" />
                    <RadioButton
                        android:textColor="@color/gray"
+                       android:id="@+id/utilization"
                        android:layout_marginTop="10dp"
                        android:layout_width="wrap_content"
                        android:text="Utilization Report"

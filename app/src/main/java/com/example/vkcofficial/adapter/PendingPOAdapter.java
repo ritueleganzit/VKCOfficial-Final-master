@@ -66,7 +66,9 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         context.startActivity(new Intent(context, PendingPODetail.class)
-        .putExtra("",pendingPO.getPurDocNum())
+        .putExtra("pur_doc_num",pendingPO.getPurDocNum())
+        .putExtra("article",pendingPO.getArticle())
+        .putExtra("doc_date",pendingPO.getDocDate())
 
         );
         activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

@@ -64,7 +64,7 @@ android:layout_marginLeft="?attr/actionBarSize"
                     android:layout_height="48dp"
 
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/notification_white"/>
+                 />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -78,7 +78,6 @@ android:layout_marginLeft="?attr/actionBarSize"
                     android:layout_alignParentRight="true"
                     android:gravity="center"
                     android:scaleType="centerInside"
-                    android:src="@drawable/notification_count"
                     android:textColor="#fff"/>
 
             </RelativeLayout>

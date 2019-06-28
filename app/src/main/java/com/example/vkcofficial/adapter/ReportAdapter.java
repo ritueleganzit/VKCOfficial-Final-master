@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +12,18 @@ import android.view.ViewGroup;
 
 import com.example.vkcofficial.CompletedPOActivity;
 import com.example.vkcofficial.R;
+import com.example.vkcofficial.model.Report;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.MyViewHolder> {
 
-    ArrayList<String> campaigns;
+   List<Report> campaigns;
     Context context;
     Activity activity;
 
-    public ReportAdapter(ArrayList<String> campaigns, Context context) {
+    public ReportAdapter(List<Report> campaigns, Context context) {
         this.campaigns = campaigns;
         this.context = context;
         activity = (Activity) context;
@@ -39,23 +42,29 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        holder.recyclerView.setLayoutManager(layoutManager);
+        holder.recyclerView.setAdapter(new PerformaceAdapter(campaigns,context));
+        /*
 holder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
 context.startActivity(new Intent(context, CompletedPOActivity.class));
 activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
-});
+});*/
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return campaigns.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView  recyclerView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            recyclerView=itemView.findViewById(R.id.rc_performance);
 
         }
     }

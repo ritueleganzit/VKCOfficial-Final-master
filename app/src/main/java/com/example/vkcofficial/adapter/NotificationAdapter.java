@@ -7,18 +7,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.vkcofficial.R;
+import com.example.vkcofficial.model.CompletePoNotification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
 
-    ArrayList<String> campaigns;
+    List<CompletePoNotification> campaigns;
     Context context;
     Activity activity;
 
-    public NotificationAdapter(ArrayList<String> campaigns, Context context) {
+    public NotificationAdapter(List<CompletePoNotification> campaigns, Context context) {
         this.campaigns = campaigns;
         this.context = context;
         activity = (Activity) context;
@@ -36,18 +39,26 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
-
+        CompletePoNotification completePoNotification=campaigns.get(i);
+        holder.vendor_name.setText(completePoNotification.getVendorName());
+        holder.created_date.setText(completePoNotification.getCreatedDate());
+        holder.pur_doc_num.setText(completePoNotification.getPurDocNum());
 
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return campaigns.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView vendor_name,pur_doc_num,created_date;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            vendor_name=itemView.findViewById(R.id.vendor_name);
+            pur_doc_num=itemView.findViewById(R.id.pur_doc_num);
+            created_date=itemView.findViewById(R.id.created_date);
+
 
         }
     }

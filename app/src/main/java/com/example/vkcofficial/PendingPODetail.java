@@ -1,6 +1,7 @@
 package com.example.vkcofficial;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,30 +13,63 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vkcofficial.adapter.PendingPOAdapter;
+import com.example.vkcofficial.api.RetrofitAPI;
+import com.example.vkcofficial.api.RetrofitInterface;
+import com.example.vkcofficial.model.p_grid.GridDatum;
+import com.example.vkcofficial.model.p_grid.PendingPoGridResponse;
+import com.example.vkcofficial.util.UserLoggedInSession;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PendingPODetail extends AppCompatActivity {
-RecyclerView rc_production_complete;
-    ArrayList<String> arrayList=new ArrayList<>();
+    RecyclerView rc_production_complete;
+    ArrayList<String> arrayList = new ArrayList<>();
     LinearLayout hourly;
+    LinearLayout lin_nodata;
+
+    ProgressDialog progressDialog;
+    String txt_pur_doc_num, article, doc_date;
+    TextView pur_doc_num, number_of_stichers, articleline_number;
+    UserLoggedInSession userLoggedInSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_podetail);
-        rc_production_complete=findViewById(R.id.rc_production_complete);
-        hourly=findViewById(R.id.hourly);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(PendingPODetail.this,LinearLayoutManager.VERTICAL,false);
+        lin_nodata = findViewById(R.id.lin_nodata);
+        txt_pur_doc_num = getIntent().getStringExtra("pur_doc_num");
+        article = getIntent().getStringExtra("article");
+        doc_date = getIntent().getStringExtra("doc_date");
+
+        rc_production_complete = findViewById(R.id.rc_production_complete);
+        hourly = findViewById(R.id.hourly);
+        pur_doc_num = findViewById(R.id.pur_doc_num);
+        number_of_stichers = findViewById(R.id.number_of_stichers);
+        articleline_number = findViewById(R.id.articleline_number);
+        userLoggedInSession = new UserLoggedInSession(PendingPODetail.this);
+        progressDialog = new ProgressDialog(PendingPODetail.this);
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PendingPODetail.this, LinearLayoutManager.VERTICAL, false);
         rc_production_complete.setLayoutManager(layoutManager);
-        rc_production_complete.setAdapter(new PendingPODetailAdapter(arrayList,PendingPODetail.this));
         hourly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PendingPODetail.this,HourlyProductionActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                startActivity(new Intent(PendingPODetail.this, HourlyProductionActivity.class)
+                        .putExtra("pur_doc_num",txt_pur_doc_num)
+                        .putExtra("article",article)
+                        .putExtra("doc_date",doc_date));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
             }
         });
@@ -46,14 +80,89 @@ RecyclerView rc_production_complete;
                 onBackPressed();
             }
         });
+
+
+        getPOGridDetails();
     }
+
+    private void getPOGridDetails() {
+
+        progressDialog.show();
+        RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
+        Call<PendingPoGridResponse> call = myInterface.pendingArticle(txt_pur_doc_num, article, doc_date);
+        call.enqueue(new Callback<PendingPoGridResponse>() {
+            @Override
+            public void onResponse(Call<PendingPoGridResponse> call, Response<PendingPoGridResponse> response) {
+                if (response.isSuccessful()) {
+
+                    progressDialog.dismiss();
+                    if (response.body().getData() != null) {
+
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+
+                            if (response.body().getData().get(i).getGridData() != null) {
+                                lin_nodata.setVisibility(View.GONE);
+                                rc_production_complete.setVisibility(View.VISIBLE);
+                                rc_production_complete.setAdapter(new PendingPODetailAdapter(response.body().getData().get(i).getGridData(), PendingPODetail.this));
+
+                            } else {
+                                lin_nodata.setVisibility(View.VISIBLE);
+                                rc_production_complete.setVisibility(View.GONE);
+                            }
+
+                            if (response.body().getData().get(i).getPurDocNum() != null && !(response.body().getData().get(i).getPurDocNum().isEmpty())) {
+                                pur_doc_num.setText("" + response.body().getData().get(i).getPurDocNum());
+
+                            }
+
+                            if ((response.body().getData().get(i).getArticle() != null && !(response.body().getData().get(i).getArticle().isEmpty()))) {
+                                articleline_number.setText("" + response.body().getData().get(i).getArticle());
+
+
+                            }
+
+                            if ((response.body().getData().get(i).getLineNumber() == null)) {
+                                // Toast.makeText(PendingPODetail.this, "dd"+response.body().getData().get(i).getLineNumber(), Toast.LENGTH_SHORT).show();
+                                //
+                            } else {
+                                articleline_number.setText("" + response.body().getData().get(i).getArticle() + "/" + response.body().getData().get(i).getLineNumber());
+                            }
+
+
+                            if ((response.body().getData().get(i).getNumberOfStichers() != null && !(response.body().getData().get(i).getNumberOfStichers().isEmpty()))) {
+                                number_of_stichers.setText("" + response.body().getData().get(i).getNumberOfStichers());
+
+                            }
+                            if ((response.body().getData().get(i).getNumberOfHelpers() == null)) {
+
+                            } else {
+                                number_of_stichers.setText("" + response.body().getData().get(i).getNumberOfStichers() + "/" + response.body().getData().get(i).getNumberOfHelpers());
+
+                            }
+
+                        }
+                    }
+                } else {
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PendingPoGridResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(PendingPODetail.this, "Server or Internet Error" , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     public static class PendingPODetailAdapter extends RecyclerView.Adapter<PendingPODetailAdapter.MyViewHolder> {
 
-        ArrayList<String> campaigns;
+        List<GridDatum> campaigns;
         Context context;
         Activity activity;
 
-        public PendingPODetailAdapter(ArrayList<String> campaigns, Context context) {
+        public PendingPODetailAdapter(List<GridDatum> campaigns, Context context) {
             this.campaigns = campaigns;
             this.context = context;
             activity = (Activity) context;
@@ -71,18 +180,36 @@ RecyclerView rc_production_complete;
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
+            GridDatum gridDatum = campaigns.get(i);
+            if (gridDatum.getGridValue() != null) {
+                holder.grid_value.setText("-" + gridDatum.getGridValue());
+            }
+            if (gridDatum.getQualityProduced() != null) {
+                holder.quality_produced.setText("(" + gridDatum.getQualityProduced() + "/");
+
+            }
+
+            if (gridDatum.getScheduledQuantity() != null) {
+                holder.scheduled_quantity.setText(gridDatum.getScheduledQuantity() + ")");
+
+            }
 
 
         }
 
         @Override
         public int getItemCount() {
-            return 7;
+            return campaigns.size();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView grid_value, scheduled_quantity, quality_produced;
+
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
+                grid_value = itemView.findViewById(R.id.grid_value);
+                scheduled_quantity = itemView.findViewById(R.id.scheduled_quantity);
+                quality_produced = itemView.findViewById(R.id.quality_produced);
 
             }
         }
@@ -91,7 +218,7 @@ RecyclerView rc_production_complete;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
     }
 }

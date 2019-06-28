@@ -37,6 +37,7 @@ public class PendingPOFragment extends Fragment {
     ProgressDialog progressDialog;
     UserLoggedInSession userLoggedInSession;
     RecyclerView rc_plan;
+
     public PendingPOFragment() {
         // Required empty public constructor
     }
@@ -56,7 +57,7 @@ public class PendingPOFragment extends Fragment {
         progressDialog.setMessage("Please Wait");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
-       getPendingPO();
+
         return v;
     }
 
@@ -96,7 +97,7 @@ public class PendingPOFragment extends Fragment {
                 progressDialog.dismiss();
                 lin_nodata.setVisibility(View.VISIBLE);
                 rc_plan.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,6 +106,7 @@ public class PendingPOFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         HomeActivity.textTitle.setText("PENDING PO");
+        getPendingPO();
 
     }
 }
