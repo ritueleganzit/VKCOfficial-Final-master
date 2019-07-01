@@ -270,6 +270,7 @@ android:text="-"
                        android:layout_height="wrap_content"
                        android:fontFamily="@font/poppins_medium"
                        android:textStyle="bold"
+                       android:id="@+id/startendtime"
                        android:textColor="@color/black"
                        android:text="PRODUCTION COMPLETE FROM 9AM TO 3PM."/>
                    <android.support.v7.widget.RecyclerView

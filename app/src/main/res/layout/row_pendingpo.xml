@@ -177,7 +177,7 @@ android:id="@+id/complete"
 
 
 
-            <com.example.vkcofficial.util.VerticalTextView
+            <com.eleganzit.vkcofficial.util.VerticalTextView
                 android:id="@+id/txtRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

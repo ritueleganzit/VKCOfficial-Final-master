@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.vkcofficial">
+    package="com.eleganzit.vkcofficial">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".OTPActivity"></activity>
+        <activity android:name=".ChangePasswordActivity"></activity>
+        <activity android:name=".OTPActivity" />
         <activity
             android:name=".HourlyCompleteActivity"
             android:screenOrientation="portrait" />
@@ -30,13 +31,26 @@
             android:name=".HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".GalleryActivity"
             android:screenOrientation="portrait" />
+
+        <service android:name=".util.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".util.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">

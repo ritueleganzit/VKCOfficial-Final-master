@@ -22,5 +22,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="otp">Please enter 4 digit verification code that you received via email</string>
+    <string name="New_password">New Password</string>
+    <string name="CONFIRM_PASSWORD">Confirm Password</string>
+    <string name="Reset_Password">Reset Password</string>
 
 </resources>
