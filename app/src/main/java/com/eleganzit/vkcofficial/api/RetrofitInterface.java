@@ -154,7 +154,8 @@ public interface RetrofitInterface {
 
             @Field("daterange") String daterange,
             @Field("vendor_id") String vendor_id,
-            @Field("type") String type
+            @Field("type") String type,
+            @Field("no_of_working_days") String no_of_working_days
 
     );@FormUrlEncoded
     @POST("/VKC-API/serchVendorList")

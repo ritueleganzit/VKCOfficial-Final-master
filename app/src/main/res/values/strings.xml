@@ -10,7 +10,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="Please_enter_email">Please Email Address</string>
+    <string name="Please_enter_email">Please Enter Email Address</string>
     <string name="Please_Enter_Valid_Email">Please Enter Valid Email</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

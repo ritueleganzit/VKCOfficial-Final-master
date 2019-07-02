@@ -7,7 +7,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:descendantFocusability="blocksDescendants"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragment.CompletedPoFragment">
@@ -120,6 +119,36 @@
                </RadioGroup>
 
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_centerVertical="true"
+                    android:theme="@style/TextLabel"
+                    android:visibility="gone"
+                    android:id="@+id/txno_of_working_days"
+                    android:textColorHint="@color/gray"
+                    android:backgroundTint="@color/gray"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColorHint="@color/gray"
+                        android:backgroundTint="@color/gray"
+                        android:inputType="number"
+                        android:id="@+id/no_of_working_days"
+                        android:singleLine="true"
+
+                        android:imeOptions="actionNext"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter no of working days"
+
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+
                 <LinearLayout
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
@@ -172,5 +201,6 @@
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
+        <include layout="@layout/nodata"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +49,7 @@ public class ReportFragment extends Fragment {
     List<String> stateArrayList=new ArrayList();
 RadioGroup rg;
 String type="1";
+TextInputLayout txno_of_working_days;
 
     RecyclerView rc_completed_list;
     ArrayList<String> arrayList=new ArrayList<>();
@@ -57,15 +59,18 @@ String type="1";
     ProgressDialog progressDialog;
     String lineid,daterange;
     UserLoggedInSession userLoggedInSession;
-TextInputEditText edenddate,vendor_name_ed;
-LinearLayout save;
+TextInputEditText edenddate,vendor_name_ed,no_of_working_days;
+LinearLayout save,lin_nodata;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_report, container, false);
+        lin_nodata=v.findViewById(R.id.lin_nodata);
         rc_completed_list=v.findViewById(R.id.rc_report);
+        txno_of_working_days=v.findViewById(R.id.txno_of_working_days);
+        no_of_working_days=v.findViewById(R.id.no_of_working_days);
         save=v.findViewById(R.id.save);
         edenddate=v.findViewById(R.id.edenddate);
         vendor_name_ed=v.findViewById(R.id.vendor_name_ed);
@@ -84,8 +89,10 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
         if (checkedId==R.id.performance)
         {
             type="1";
+            txno_of_working_days.setVisibility(View.GONE);
         }else
         {
+            txno_of_working_days.setVisibility(View.VISIBLE);
             type="2";
         }
     }
@@ -109,7 +116,15 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     }
                     else
                     {
-                        searchData1();
+                        if (no_of_working_days.getText().toString().equalsIgnoreCase(""))
+                        {
+                            Toast.makeText(getActivity(), "Enter no of working days", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            searchData1();
+
+                        }
                     }
 
                 }
@@ -148,7 +163,7 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
 
-                        edenddate.setText(startYear+"-"+startMonth+"-"+startDay+"/"+endYear+"-"+endMonth+"-"+endDay);
+                        edenddate.setText(startYear+"-"+(startMonth+1)+"-"+startDay+"/"+endYear+"-"+(endMonth+1)+"-"+endDay);
                         daterange=edenddate.getText().toString();
 
                     }
@@ -163,7 +178,7 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
         progressDialog.show();
         Log.d("sdfs",""+userLoggedInSession.getUserDetails().get(UserLoggedInSession.USER_ID));
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<ReportResponse> call=myInterface.report(daterange,lineid,type);
+        Call<ReportResponse> call=myInterface.report(daterange,lineid,type,no_of_working_days.getText().toString());
         call.enqueue(new Callback<ReportResponse>() {
             @Override
             public void onResponse(Call<ReportResponse> call, Response<ReportResponse> response) {
@@ -172,14 +187,25 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     progressDialog.dismiss();
                     if (response.body().getData()!=null)
                     {
-
+                        lin_nodata.setVisibility(View.GONE);
+                        rc_completed_list.setVisibility(View.VISIBLE);
                         Log.d("fsdfsd",""+response.body().getData());
                         rc_completed_list.setAdapter(new ReportUtilizationAdapter(response.body().getData(),getActivity()));
 
                     }
+                    else
+                    {
+                        Log.d("fsdfsd","hh"+response.body().getMessage());
+
+                        lin_nodata.setVisibility(View.VISIBLE);
+                        rc_completed_list.setVisibility(View.GONE);
+                    }
                 }
                 else
                 {
+                    Log.d("fsdfsd","hh"+response.body().getMessage());
+                    lin_nodata.setVisibility(View.VISIBLE);
+                    rc_completed_list.setVisibility(View.GONE);
                     progressDialog.dismiss();
                 }
             }
@@ -187,6 +213,8 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onFailure(Call<ReportResponse> call, Throwable t) {
                 progressDialog.dismiss();
+                lin_nodata.setVisibility(View.VISIBLE);
+                rc_completed_list.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -196,7 +224,7 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
         progressDialog.show();
         Log.d("sdfs",""+userLoggedInSession.getUserDetails().get(UserLoggedInSession.USER_ID));
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<ReportResponse> call=myInterface.report(daterange,lineid,type);
+        Call<ReportResponse> call=myInterface.report(daterange,lineid,type,"");
         call.enqueue(new Callback<ReportResponse>() {
             @Override
             public void onResponse(Call<ReportResponse> call, Response<ReportResponse> response) {
@@ -208,11 +236,19 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                         Log.d("fsdfsd",""+response.body().getData());
                         rc_completed_list.setAdapter(new ReportAdapter(response.body().getData(),getActivity()));
-
+                        lin_nodata.setVisibility(View.GONE);
+                        rc_completed_list.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        lin_nodata.setVisibility(View.VISIBLE);
+                        rc_completed_list.setVisibility(View.GONE);
                     }
                 }
                 else
                 {
+                    lin_nodata.setVisibility(View.VISIBLE);
+                    rc_completed_list.setVisibility(View.GONE);
                     progressDialog.dismiss();
                 }
             }
@@ -220,6 +256,8 @@ rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onFailure(Call<ReportResponse> call, Throwable t) {
                 progressDialog.dismiss();
+                lin_nodata.setVisibility(View.VISIBLE);
+                rc_completed_list.setVisibility(View.GONE);
             }
         });
 

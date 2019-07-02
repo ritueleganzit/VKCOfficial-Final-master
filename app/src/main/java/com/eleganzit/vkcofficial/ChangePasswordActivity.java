@@ -60,7 +60,7 @@ String email;
     private void changepassword() {
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<OTPResponse> call=myInterface.checkCodeOfficial(password.getText().toString(),email);
+        Call<OTPResponse> call=myInterface.resetOfficialPassowrd(password.getText().toString(),email);
         call.enqueue(new Callback<OTPResponse>() {
             @Override
             public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
