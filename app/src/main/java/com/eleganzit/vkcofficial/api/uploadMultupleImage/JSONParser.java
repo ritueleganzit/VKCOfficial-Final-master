@@ -266,7 +266,7 @@ public class JSONParser {
 
 
         try {
-            final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+            final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
 
             Log.e("Method", "=======");
             RequestBody requestBody;

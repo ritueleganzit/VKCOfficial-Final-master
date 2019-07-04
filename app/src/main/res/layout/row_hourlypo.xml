@@ -169,32 +169,6 @@ android:gravity="end"
                         />
 
 
-                </TableRow> <TableRow android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="50"
-                        android:ellipsize="end"
-
-                        android:fontFamily="@font/poppins_regular"
-                        android:singleLine="true"
-                        android:text="Complete"
-                        />
-
-                    <TextView
-                        android:id="@+id/complete"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="50"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/poppins_regular"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/red"
-                        />
-
-
                 </TableRow>
 
 

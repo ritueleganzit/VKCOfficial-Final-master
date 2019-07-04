@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,11 +74,19 @@ if (isValid())
                 progressDialog.dismiss();
                 if (response.isSuccessful())
                 {
-                    Toast.makeText(ForgotPasswordActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ForgotPasswordActivity.this, OTPActivity.class)
-                            .putExtra("email",ed_email.getText().toString()));
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    Log.d("unyuy",""+response.body().getStatus());
+                    if(response.body().getStatus().toString().equals("1")) {
+                        Toast.makeText(ForgotPasswordActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ForgotPasswordActivity.this, OTPActivity.class)
+                                .putExtra("email", ed_email.getText().toString()));
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                    else
+                    {
+                        Toast.makeText(ForgotPasswordActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
                 }
             }
 

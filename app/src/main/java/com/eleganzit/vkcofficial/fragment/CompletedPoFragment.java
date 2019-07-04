@@ -561,7 +561,7 @@ ed_search.setText(searchData.getVendorName());
         arrayList=new ArrayList();
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<SearchPOResponse> call=myInterface.completePoList(toString,toString1,"","");
+        Call<SearchPOResponse> call=myInterface.completePoList(toString,toString1,date,vendor_id);
         call.enqueue(new Callback<SearchPOResponse>() {
             @Override
             public void onResponse(Call<SearchPOResponse> call, Response<SearchPOResponse> response) {
@@ -570,6 +570,7 @@ ed_search.setText(searchData.getVendorName());
                     progressDialog.dismiss();
                     if (response.body().getData()!=null)
                     {
+                        rc_completed_list.setVisibility(View.VISIBLE);
                         if (response.body().getData().size()==1)
                         {
                             records.setText("Found "+response.body().getData().size()+ " Record");
@@ -585,6 +586,12 @@ ed_search.setText(searchData.getVendorName());
                             rc_completed_list.setAdapter(new CompletedPOAdapter(response.body().getData(),getActivity()));
 
                         }
+                    }
+                    else
+                    {
+                        records.setText("Found 0 Record");
+                        rc_completed_list.setVisibility(View.GONE);
+
                     }
 
                 }

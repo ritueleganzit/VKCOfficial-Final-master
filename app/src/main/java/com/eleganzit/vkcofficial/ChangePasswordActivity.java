@@ -67,15 +67,24 @@ String email;
                 progressDialog.dismiss();
                 if (response.isSuccessful())
                 {
-                    Toast.makeText(ChangePasswordActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    if(response.body().getStatus().toString().equals("1")) {
+                        Toast.makeText(ChangePasswordActivity.this, ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-                    // Staring Login Activity
-                    );
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                // Staring Login Activity
+                        );
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                    else
+                    {
+
+                        Toast.makeText(ChangePasswordActivity.this, ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             }
 

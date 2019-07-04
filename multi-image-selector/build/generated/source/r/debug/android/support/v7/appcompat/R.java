@@ -796,8 +796,8 @@ public final class R {
         public static int abc_shareactionprovider_share_with = 0x7f150025;
         public static int abc_shareactionprovider_share_with_application = 0x7f150026;
         public static int abc_toolbar_collapse_description = 0x7f150027;
-        public static int search_menu_title = 0x7f150037;
-        public static int status_bar_notification_info_overflow = 0x7f150038;
+        public static int search_menu_title = 0x7f150038;
+        public static int status_bar_notification_info_overflow = 0x7f150039;
     }
     public static final class style {
         public static int AlertDialog_AppCompat = 0x7f160001;

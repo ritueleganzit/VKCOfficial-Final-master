@@ -115,8 +115,23 @@ String txt_pur_doc_num,txt_article,txt_doc_date;
 ok.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        addMarkCompleteDetail2();
-        d.dismiss();
+        if (mSelectPath!=null) {
+
+            if (mSelectPath.size() > 0) {
+                addMarkCompleteDetail2();
+                d.dismiss();
+            }
+            else
+            {
+                Toast.makeText(CompletedPOActivity.this, "Select Image", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(CompletedPOActivity.this, "Select Image", Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 });
                 ed_email.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +241,8 @@ getPOGridDetails();
 
         HashMap<String, String> map = new HashMap<>();
 
+
+        Log.d("messageee",""+txt_article+" "+txt_pur_doc_num+" "+mSelectPath);
         map.put("pur_doc_num", txt_pur_doc_num);
         map.put("article", txt_article);
 
@@ -255,8 +272,8 @@ getPOGridDetails();
             @Override
             public void onFailureResult(JSONObject result) {
                 progressDialog.dismiss();
-                Toast.makeText(CompletedPOActivity.this, "Server or Internet Error"+result.toString(), Toast.LENGTH_SHORT).show();
-                Log.d("messageeeeeeeeeee", result.toString());
+                Toast.makeText(CompletedPOActivity.this, "Server or Internet Error", Toast.LENGTH_SHORT).show();
+                Log.d("messageeeeeeeeeee--", result.toString());
 
             }
 
@@ -380,7 +397,7 @@ getPOGridDetails();
                 mediapath = sb.toString().trim();
                 Log.d("LOG_TAG", "Selected Images 1.5" + mediapath);
 
-                Log.d("mediapathhhhhhhh", "" + mediapath);
+                Log.d("mediapathhhhhhhh", "" + mSelectPath);
                 imglist.add(""+mediapath.trim());
                 rc_image.setAdapter(new ImageAdapter(mSelectPath,CompletedPOActivity.this));
 

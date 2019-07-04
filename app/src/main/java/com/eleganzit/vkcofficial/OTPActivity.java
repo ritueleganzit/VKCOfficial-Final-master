@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class OTPActivity extends AppCompatActivity {
 LinearLayout submit;
 PinEntryView pinEntryView;
-String pinentered,email;
+String pinentered="",email;
     ProgressDialog progressDialog;
 
     @Override
@@ -47,7 +47,7 @@ String pinentered,email;
        submit.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               if (pinentered.equals("")) {
+               if (pinentered.equalsIgnoreCase("")) {
 
                    Toast.makeText(OTPActivity.this, "Please Enter Pin", Toast.LENGTH_SHORT).show();
                }
@@ -69,11 +69,19 @@ String pinentered,email;
                 progressDialog.dismiss();
                 if (response.isSuccessful())
                 {
-                    Toast.makeText(OTPActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(OTPActivity.this, ChangePasswordActivity.class)
-                            .putExtra("email",email));
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    if(response.body().getStatus().toString().equals("1")) {
+                        Toast.makeText(OTPActivity.this, ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(OTPActivity.this, ChangePasswordActivity.class)
+                                .putExtra("email",email));
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                    else
+                    {
+                        Toast.makeText(OTPActivity.this, ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             }
 

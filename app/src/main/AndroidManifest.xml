@@ -13,8 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChangePasswordActivity"></activity>
-        <activity android:name=".OTPActivity" />
+        <activity android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".OTPActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HourlyCompleteActivity"
             android:screenOrientation="portrait" />

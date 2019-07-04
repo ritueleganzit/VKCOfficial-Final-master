@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:hint="Search Vendor"
             android:singleLine="true"
+
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:imeOptions="actionSearch"
             android:layout_toLeftOf="@+id/chat"

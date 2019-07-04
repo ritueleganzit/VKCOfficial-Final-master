@@ -52,7 +52,7 @@ public class CallAPiActivity extends AppCompatActivity {
                         public void run() {
 
                             try {
-                                if (finalResult.getString("status").equalsIgnoreCase("true")) {
+                                if (finalResult.getString("status").equalsIgnoreCase("1")) {
                                     getApiResult.onSuccesResult(finalResult);
                                 } else {
                                     getApiResult.onFailureResult(finalResult);

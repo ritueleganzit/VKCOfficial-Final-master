@@ -47,8 +47,7 @@ public class CompletedPOAdapter extends RecyclerView.Adapter<CompletedPOAdapter.
         holder.vendor_name.setText(""+searchPO.getVendorName());
         holder.pur_doc_num.setText(""+searchPO.getPurDocNum());
         holder.article.setText(""+searchPO.getArticle());
-        holder.complete.setText(""+searchPO.getComplete()+"%");
-        holder.doc_date.setText(""+searchPO.getDocDate()+"%");
+        holder.doc_date.setText(""+searchPO.getDocDate()+"");
 holder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -70,14 +69,13 @@ activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_ou
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView vendor_name,pur_doc_num,article,doc_date,complete;
+        TextView vendor_name,pur_doc_num,article,doc_date;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             vendor_name=itemView.findViewById(R.id.vendor_name);
             pur_doc_num=itemView.findViewById(R.id.pur_doc_num);
             article=itemView.findViewById(R.id.article);
             doc_date=itemView.findViewById(R.id.doc_date);
-            complete=itemView.findViewById(R.id.complete);
 
         }
     }

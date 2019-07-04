@@ -113,8 +113,22 @@ ok.setOnClickListener(new View.OnClickListener() {
         //d.dismiss();
         Log.d("afasghasd",txt_pur_doc_num+"   "+article+"   "+imglist);
 
-        addMarkCompleteDetail2();
-        d.dismiss();
+        if (mSelectPath!=null)
+        {
+            if (mSelectPath.size()>0)
+            {
+                addMarkCompleteDetail2();
+                d.dismiss();
+            }
+            else {
+                Toast.makeText(HourlyCompleteActivity.this, "Select Image", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(HourlyCompleteActivity.this, "Select Image", Toast.LENGTH_SHORT).show();
+
+        }
     }
 });
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -264,6 +278,7 @@ ok.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onFailure(Call<POGridResponse> call, Throwable t) {
+                progressDialog.dismiss();
 
                 lin_nodata.setVisibility(View.VISIBLE);
                 rc_hourly.setVisibility(View.GONE);

@@ -43,9 +43,37 @@ public class PerformaceAdapter extends RecyclerView.Adapter<PerformaceAdapter.My
         Report pNumber=campaigns.get(i);
         int p=i+1;
         holder.srno.setText(""+p);
-        holder.inputQty.setText(""+pNumber.getInputQty());
-        holder.outputQty.setText(""+pNumber.getOutputQty());
-        holder.month.setText(""+pNumber.getMonth());
+        if (pNumber.getInputQty()!=null && !(pNumber.getInputQty()).isEmpty())
+        {
+            holder.inputQty.setText(""+pNumber.getInputQty());
+
+        }
+        else
+        {
+            holder.inputQty.setText("-");
+
+        }  if (pNumber.getOutputQty()!=null && !(pNumber.getOutputQty()).isEmpty())
+        {
+            holder.outputQty.setText(""+pNumber.getOutputQty());
+
+        }
+        else
+        {
+            holder.outputQty.setText("-");
+
+        }
+         if (pNumber.getMonth()!=null && !(pNumber.getMonth()).isEmpty())
+        {
+            holder.month.setText(""+pNumber.getMonth());
+
+        }
+        else
+        {
+            holder.month.setText("-");
+
+        }
+
+
 
     }
 

@@ -39,11 +39,58 @@ public class HourlyPOAdapter extends RecyclerView.Adapter<HourlyPOAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
 GridData gridData=campaigns.get(i);
-holder.grid_value.setText(""+gridData.getGridValue());
-holder.scheduled_quantity.setText(""+gridData.getScheduledQuantity());
-holder.quality_produced.setText(""+gridData.getQualityProduced());
-holder.start_time.setText(""+gridData.getStartTime());
-holder.end_time.setText(""+gridData.getEndTime());
+if (gridData.getGridValue()!=null && !(gridData.getGridValue().isEmpty()))
+{
+    holder.grid_value.setText(""+gridData.getGridValue());
+
+}
+else
+{
+    holder.grid_value.setText("-");
+
+}
+
+if (gridData.getScheduledQuantity()!=null && !(gridData.getScheduledQuantity().isEmpty()))
+{
+    holder.scheduled_quantity.setText(""+gridData.getScheduledQuantity());
+
+}
+else
+{
+    holder.scheduled_quantity.setText("-");
+
+}
+if (gridData.getQualityProduced()!=null && !(gridData.getQualityProduced().isEmpty()))
+{
+    holder.quality_produced.setText(""+gridData.getQualityProduced());
+
+}
+else
+{
+    holder.quality_produced.setText("-");
+
+}
+
+if (gridData.getStartTime()!=null && !(gridData.getStartTime().isEmpty()))
+{
+    holder.start_time.setText(""+gridData.getStartTime());
+
+}
+else
+{
+    holder.start_time.setText("-");
+
+}
+if (gridData.getEndTime()!=null && !(gridData.getEndTime().isEmpty()))
+{
+    holder.end_time.setText(""+gridData.getEndTime());
+
+}
+else
+{
+    holder.end_time.setText("-");
+
+}
 
     }
 
@@ -54,7 +101,7 @@ holder.end_time.setText(""+gridData.getEndTime());
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView grid_value,scheduled_quantity,quality_produced,start_time,end_time,complete;
+        TextView grid_value,scheduled_quantity,quality_produced,start_time,end_time;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             grid_value=itemView.findViewById(R.id.grid_value);
@@ -62,7 +109,6 @@ holder.end_time.setText(""+gridData.getEndTime());
             quality_produced=itemView.findViewById(R.id.quality_produced);
             start_time=itemView.findViewById(R.id.start_time);
             end_time=itemView.findViewById(R.id.end_time);
-            complete=itemView.findViewById(R.id.complete);
 
         }
     }

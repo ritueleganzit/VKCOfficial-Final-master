@@ -147,35 +147,6 @@ android:id="@+id/doc_date"
 
                 </TableRow>
 
-                <TableRow android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="50"
-                        android:fontFamily="@font/poppins_regular"
-
-                        android:text="Complete"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:gravity="end"
-                        android:id="@+id/complete"
-                        android:fontFamily="@font/poppins_regular"
-
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_weight="50"
-                        android:text="50%"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        />
-
-
-                </TableRow>
 
 
             </TableLayout>

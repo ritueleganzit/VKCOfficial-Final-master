@@ -42,10 +42,44 @@ public class UtilizationAdapter extends RecyclerView.Adapter<UtilizationAdapter.
         Report pNumber=campaigns.get(i);
         int p=i+1;
         holder.srno.setText(""+p);
-        holder.inputQty.setText(""+pNumber.getCapacity());
-        holder.outputQty.setText(""+pNumber.getExp());
-        holder.month.setText(""+pNumber.getInputpair());
-        holder.utilization.setText(""+pNumber.getUtilization());
+        if (pNumber.getCapacity()!=null && !(pNumber.getCapacity().toString().isEmpty()))
+        {
+            holder.inputQty.setText(""+pNumber.getCapacity());
+
+        }
+        else
+        {
+            holder.inputQty.setText("-");
+
+        }
+        if (pNumber.getExp()!=null && !(pNumber.getExp().toString().isEmpty()))
+        {
+            holder.outputQty.setText(""+pNumber.getExp());
+
+        }
+        else
+        {
+            holder.outputQty.setText("-");
+
+        }
+        if (pNumber.getInputpair()!=null && !(pNumber.getInputpair().toString().isEmpty()))
+        {
+            holder.month.setText(""+pNumber.getInputpair());
+
+        }
+        else {
+            holder.month.setText("-");
+
+        }
+        if (pNumber.getUtilization()!=null && !(pNumber.getUtilization().toString().isEmpty()))
+            {
+                holder.utilization.setText(""+pNumber.getUtilization());
+
+            }
+        else {
+            holder.utilization.setText("-");
+
+        }
 
     }
 
