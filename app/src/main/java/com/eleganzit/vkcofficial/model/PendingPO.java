@@ -7,6 +7,9 @@ public class PendingPO {
     @SerializedName("vendor_name")
     @Expose
     private String vendorName;
+    @SerializedName("item")
+    @Expose
+    private String item;
     @SerializedName("pur_doc_num")
     @Expose
     private String purDocNum;
@@ -19,6 +22,14 @@ public class PendingPO {
     @SerializedName("complete")
     @Expose
     private Integer complete;
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
 
     public String getVendorName() {
         return vendorName;

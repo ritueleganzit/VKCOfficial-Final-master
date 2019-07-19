@@ -72,7 +72,7 @@ public interface RetrofitInterface {
  @FormUrlEncoded()
     @POST("/VKC-API/pendingPO")
     Call<PendingPOResponse> pendingPO   (
-            @Field("data") String data
+            @Field("vendor_id") String data
 
 
     );
@@ -80,13 +80,24 @@ public interface RetrofitInterface {
 
  @FormUrlEncoded()
     @POST("/VKC-API/pendingArticle")
-    Call<PendingPoGridResponse> pendingArticle   (
+    Call<PendingPoGridResponse> pendingPoDetails   (
             @Field("pur_doc_num") String pur_doc_num,
             @Field("article") String article,
-            @Field("doc_date") String doc_date
+            @Field("item") String item
 
 
     );@FormUrlEncoded()
+    @POST("/VKC-API/pendingArticle")
+    Call<PendingPoGridResponse> pendingArticle   (
+            @Field("pur_doc_num") String pur_doc_num,
+            @Field("article") String article,
+            @Field("item") String doc_date
+
+
+    );
+
+
+    @FormUrlEncoded()
     @POST("/VKC-API/pendingArticle")
     Call<PendingPoGridResponse> pendingArticle   (
             @Field("pur_doc_num") String pur_doc_num,
@@ -101,6 +112,14 @@ public interface RetrofitInterface {
             @Field("pur_doc_num") String pur_doc_num,
             @Field("article") String article,
             @Field("doc_date") String doc_date
+
+
+    );@FormUrlEncoded()
+    @POST("/VKC-API/pendingGrid")
+    Call<POGridResponse> pendingGriditem   (
+            @Field("pur_doc_num") String pur_doc_num,
+            @Field("article") String article,
+            @Field("item") String item
 
 
     );
@@ -128,7 +147,8 @@ public interface RetrofitInterface {
             @Field("pur_doc_num") String pur_doc_num,
             @Field("article") String article,
             @Field("date") String date,
-            @Field("vendor_id") String vendor_id
+            @Field("vendor_id") String vendor_id,
+            @Field("item") String item
 
     );
 
@@ -137,14 +157,16 @@ public interface RetrofitInterface {
     @POST("/VKC-API/totalVendorDefect")
     Call<TotalVendorDefectResponse> totalVendorDefect   (
 
-            @Field("article") String article
+            @Field("article") String article,
+            @Field("item") String item
 
     );
 @FormUrlEncoded
     @POST("/VKC-API/articleWiseDefect")
     Call<ArticleWiseDefectResponse> articleWiseDefect   (
 
-            @Field("article") String article
+            @Field("article") String article,
+            @Field("item") String item
 
     );
 

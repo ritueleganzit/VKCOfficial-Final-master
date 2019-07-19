@@ -24,7 +24,7 @@ import retrofit2.Response;
 public class HourlyProductionActivity extends AppCompatActivity {
 RecyclerView rc_hourly;
     ArrayList<String> arrayList=new ArrayList<>();
-    String txt_pur_doc_num, article, doc_date;
+    String txt_pur_doc_num, article, doc_date,item;
     UserLoggedInSession userLoggedInSession;
     LinearLayout lin_nodata;
 
@@ -35,6 +35,7 @@ RecyclerView rc_hourly;
         setContentView(R.layout.activity_hourly_production);
         txt_pur_doc_num = getIntent().getStringExtra("pur_doc_num");
         article = getIntent().getStringExtra("article");
+        item = getIntent().getStringExtra("item");
         lin_nodata = findViewById(R.id.lin_nodata);
 
         doc_date = getIntent().getStringExtra("doc_date");
@@ -60,7 +61,7 @@ RecyclerView rc_hourly;
     private void pendingGrid() {
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<POGridResponse> call=myInterface.pendingGrid(txt_pur_doc_num,article,doc_date);
+        Call<POGridResponse> call=myInterface.pendingGriditem(txt_pur_doc_num,article,item);
         call.enqueue(new Callback<POGridResponse>() {
             @Override
             public void onResponse(Call<POGridResponse> call, Response<POGridResponse> response) {

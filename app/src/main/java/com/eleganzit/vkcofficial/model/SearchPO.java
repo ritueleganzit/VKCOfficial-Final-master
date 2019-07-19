@@ -12,13 +12,23 @@ public class SearchPO {
     private String purDocNum;
     @SerializedName("article")
     @Expose
-    private String article;
+    private String article; @SerializedName("item")
+    @Expose
+    private String item;
     @SerializedName("doc_date")
     @Expose
     private String docDate;
     @SerializedName("complete")
     @Expose
     private Integer complete;
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
 
     public String getVendorName() {
         return vendorName;

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,40 +31,50 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PendingPOFragment extends Fragment {
+public class PendingPOFragment extends AppCompatActivity {
     LinearLayout lin_nodata;
     ArrayList<String> arrayList=new ArrayList<>();
     ProgressDialog progressDialog;
     UserLoggedInSession userLoggedInSession;
     RecyclerView rc_plan;
-
+String vendor_id;
     public PendingPOFragment() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_pending_po, container, false);
-        rc_plan=v.findViewById(R.id.rc_pendingpo);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_pending_po);
+        rc_plan=findViewById(R.id.rc_pendingpo);
+        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(PendingPOFragment.this,LinearLayoutManager.VERTICAL,false);
         rc_plan.setLayoutManager(layoutManager);
-        lin_nodata=v.findViewById(R.id.lin_nodata);
-        userLoggedInSession=new UserLoggedInSession(getActivity());
-        progressDialog=new ProgressDialog(getActivity());
+        lin_nodata=findViewById(R.id.lin_nodata);
+        userLoggedInSession=new UserLoggedInSession(PendingPOFragment.this);
+        progressDialog=new ProgressDialog(PendingPOFragment.this);
         progressDialog.setMessage("Please Wait");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+        vendor_id=getIntent().getStringExtra("vendor_id");
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        return v;
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
+    }
+   
     private void getPendingPO() {
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<PendingPOResponse> call=myInterface.pendingPO("");
+        Call<PendingPOResponse> call=myInterface.pendingPO(vendor_id);
         call.enqueue(new Callback<PendingPOResponse>() {
             @Override
             public void onResponse(Call<PendingPOResponse> call, Response<PendingPOResponse> response) {
@@ -74,7 +85,7 @@ public class PendingPOFragment extends Fragment {
                     {
                         lin_nodata.setVisibility(View.GONE);
                         rc_plan.setVisibility(View.VISIBLE);
-                        rc_plan.setAdapter(new PendingPOAdapter(response.body().getData(),getActivity()));
+                        rc_plan.setAdapter(new PendingPOAdapter(response.body().getData(),PendingPOFragment.this));
 
                     }
                     else
@@ -96,16 +107,24 @@ public class PendingPOFragment extends Fragment {
                 progressDialog.dismiss();
                 lin_nodata.setVisibility(View.VISIBLE);
                 rc_plan.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingPOFragment.this, "Server or Internet Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (vendor_id!=null && !(vendor_id.isEmpty())) {
+            getPendingPO();
+        }
+    }
+
+  /*  @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         HomeActivity.textTitle.setText("PENDING PO");
-        getPendingPO();
 
-    }
+
+    }*/
 }

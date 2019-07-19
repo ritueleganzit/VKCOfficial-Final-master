@@ -25,7 +25,7 @@ public class CallAPiActivity extends AppCompatActivity {
     public CallAPiActivity(Context context) {
         this.context = context;
         baseActivity = (Activity) context;
-        appDialogs = new AppDialogs(context);
+            appDialogs = new AppDialogs(context);
     }
 
 

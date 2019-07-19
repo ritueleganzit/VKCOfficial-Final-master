@@ -49,7 +49,7 @@ import retrofit2.Response;
  */
 public class ViewDefectsFragment extends Fragment {
 
-    ArrayList<String> arrayList=new ArrayList<>();
+    ArrayList<TotalVendorDefect> arrayList=new ArrayList<>();
     ArrayList<String> imagelist;
     List<String> articlelist;
 
@@ -88,7 +88,8 @@ public class ViewDefectsFragment extends Fragment {
                 }
                 else
                 {
-                    searchData(edstartdate.getText().toString());
+                    String art[]=edstartdate.getText().toString().split("-");
+                    searchData(art[0],art[1]);
                 }
             }
         });
@@ -104,7 +105,8 @@ public class ViewDefectsFragment extends Fragment {
                 }
                 else
                 {
-                    viewdefectsgal();
+                    String art[]=edstartdate.getText().toString().split("-");
+                    viewdefectsgal(art[0],art[1]);
 
                 }
 
@@ -148,11 +150,11 @@ public class ViewDefectsFragment extends Fragment {
 
     }
 
-    private void viewdefectsgal() {
+    private void viewdefectsgal(String art,String item) {
         imagelist=new ArrayList<>();
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<ArticleWiseDefectResponse> call=myInterface.articleWiseDefect(edstartdate.getText().toString());
+        Call<ArticleWiseDefectResponse> call=myInterface.articleWiseDefect(art,item);
         call.enqueue(new Callback<ArticleWiseDefectResponse>() {
             @Override
             public void onResponse(Call<ArticleWiseDefectResponse> call, Response<ArticleWiseDefectResponse> response) {
@@ -196,11 +198,11 @@ if (imagelist.size()>0) {
 
     }
 
-    private void searchData(String toString) {
+    private void searchData(String art,String item) {
         arrayList=new ArrayList();
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<TotalVendorDefectResponse> call=myInterface.totalVendorDefect(edstartdate.getText().toString());
+        Call<TotalVendorDefectResponse> call=myInterface.totalVendorDefect(art,item);
         call.enqueue(new Callback<TotalVendorDefectResponse>() {
             @Override
             public void onResponse(Call<TotalVendorDefectResponse> call, Response<TotalVendorDefectResponse> response) {
@@ -211,8 +213,8 @@ if (imagelist.size()>0) {
                     {
 
                         Log.d("ffffffffffff",""+response.body().getData());
-
-                        rc_view_defects.setAdapter(new ViewDefectsAdapter(response.body().getData(),getActivity()));
+                        arrayList.addAll(response.body().getData());
+                        rc_view_defects.setAdapter(new ViewDefectsAdapter(arrayList,getActivity()));
                         if (response.body().getData().size()==1)
                         {
                             foundrec.setText("Found "+response.body().getData().size()+ " Record");
@@ -256,7 +258,7 @@ if (imagelist.size()>0) {
                     {
                         for (int i=0;i<response.body().getData().size();i++)
                         {
-                            articlelist.add(response.body().getData().get(i).getArticle());
+                            articlelist.add(response.body().getData().get(i).getArticle()+"-"+response.body().getData().get(i).getItem());
                             Log.d("asfsdf",""+response.body().getData().get(i).getArticle());
                         }
                         edstartdate.setText(articlelist.get(0));

@@ -43,10 +43,7 @@ public class PendingPOAdapter extends RecyclerView.Adapter<PendingPOAdapter.MyVi
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
 
         final PendingPO pendingPO=campaigns.get(i);
-        if (pendingPO.getVendorName()!=null && !(pendingPO.getVendorName().isEmpty()))
-        {
-            holder.vendor_name.setText(pendingPO.getVendorName());
-        }  if (pendingPO.getDocDate()!=null && !(pendingPO.getDocDate().isEmpty()))
+         if (pendingPO.getDocDate()!=null && !(pendingPO.getDocDate().isEmpty()))
         {
             holder.doc_date.setText(pendingPO.getDocDate());
         }
@@ -55,7 +52,7 @@ public class PendingPOAdapter extends RecyclerView.Adapter<PendingPOAdapter.MyVi
             holder.pur_doc_num.setText(pendingPO.getPurDocNum());
         }if (pendingPO.getArticle()!=null && !(pendingPO.getArticle().isEmpty()))
         {
-            holder.article.setText(pendingPO.getArticle());
+            holder.article.setText(pendingPO.getArticle()+"-"+pendingPO.getItem());
         }
             holder.complete.setText(""+pendingPO.getComplete()+"%");
 
@@ -67,6 +64,7 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
         .putExtra("pur_doc_num",pendingPO.getPurDocNum())
         .putExtra("article",pendingPO.getArticle())
         .putExtra("doc_date",pendingPO.getDocDate())
+        .putExtra("item",pendingPO.getItem())
 
         );
         activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
@@ -80,10 +78,9 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView vendor_name,pur_doc_num,article,doc_date,complete;
+        TextView pur_doc_num,article,doc_date,complete;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            vendor_name=itemView.findViewById(R.id.vendor_name);
             pur_doc_num=itemView.findViewById(R.id.pur_doc_num);
             article=itemView.findViewById(R.id.article);
             complete=itemView.findViewById(R.id.complete);

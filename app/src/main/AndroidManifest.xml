@@ -25,6 +25,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".HourlyProductionActivity"
+            android:screenOrientation="portrait" /><activity
+            android:name=".fragment.PendingPOFragment"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PendingPODetail"

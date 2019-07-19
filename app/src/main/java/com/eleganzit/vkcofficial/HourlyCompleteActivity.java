@@ -68,7 +68,7 @@ public class HourlyCompleteActivity extends AppCompatActivity {
     RecyclerView rc_image;
 
     ArrayList<String> str_photo_array=new ArrayList<>();
-    private String mediapath,txt_pur_doc_num,article,doc_date;
+    private String mediapath,txt_pur_doc_num,article,item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +78,7 @@ public class HourlyCompleteActivity extends AppCompatActivity {
         lin_nodata = findViewById(R.id.lin_nodata);
         txt_pur_doc_num = getIntent().getStringExtra("pur_doc_num");
         article = getIntent().getStringExtra("article");
-        doc_date = getIntent().getStringExtra("doc_date");
+        item = getIntent().getStringExtra("item");
         callAPiActivity = new CallAPiActivity(HourlyCompleteActivity.this);
         userLoggedInSession = new UserLoggedInSession(HourlyCompleteActivity.this);
         progressDialog = new ProgressDialog(HourlyCompleteActivity.this);
@@ -173,6 +173,7 @@ ok.setOnClickListener(new View.OnClickListener() {
 
         map.put("pur_doc_num", txt_pur_doc_num);
         map.put("article", article);
+        map.put("item", item);
 
         callAPiActivity.doPostWithFiles(HourlyCompleteActivity.this, map, URL_COMPLETE, mSelectPath, "image[]", new GetResponse() {
 
@@ -254,7 +255,7 @@ ok.setOnClickListener(new View.OnClickListener() {
     private void pendingGrid() {
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<POGridResponse> call=myInterface.pendingGrid(txt_pur_doc_num,article,doc_date);
+        Call<POGridResponse> call=myInterface.pendingGriditem(txt_pur_doc_num,article,item);
         call.enqueue(new Callback<POGridResponse>() {
             @Override
             public void onResponse(Call<POGridResponse> call, Response<POGridResponse> response) {

@@ -3,6 +3,7 @@ package com.eleganzit.vkcofficial;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,10 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eleganzit.vkcofficial.fragment.AllVendorListFragment;
 import com.eleganzit.vkcofficial.fragment.CompletedPoFragment;
 import com.eleganzit.vkcofficial.fragment.NotificationandMessage;
 import com.eleganzit.vkcofficial.fragment.PendingPOFragment;
@@ -29,7 +32,8 @@ public class HomeActivity extends AppCompatActivity
   public   static TextView plan,entry,textTitle,tv_defects;
     LinearLayout tablayout;
     UserLoggedInSession userLoggedInSession;
-
+    private Fragment fragment = null;
+    private FragmentManager fragmentManager;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,11 @@ public class HomeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        TextView text = (TextView) header.findViewById(R.id.official_name);
+        text.setText("Welcome, "+userLoggedInSession.getUserDetails().get(UserLoggedInSession.USER_NAME));
+        displayView(0);
     }
 
     @Override
@@ -65,13 +74,29 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        textTitle.setText("PENDING PO");
-        PendingPOFragment myPhotosFragment = new PendingPOFragment();
+        //textTitle.setText("PENDING PO");
+        AllVendorListFragment myPhotosFragment = new AllVendorListFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, myPhotosFragment, "TAG")
                 .commit();
     }
+    private void displayView(int position) {
+        fragment = null;
+        String fragmentTags = "";
+        switch (position) {
+            case 0:
+                fragment = new AllVendorListFragment();
+                break;
 
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment, fragmentTags).commit();
+        }
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -85,11 +110,13 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_po) {
 
 
-            textTitle.setText("PENDING PO");
-            PendingPOFragment myPhotosFragment = new PendingPOFragment();
+            textTitle.setText("VENDORS");
+            AllVendorListFragment myPhotosFragment = new AllVendorListFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, myPhotosFragment, "TAG")
                     .commit();
+
+
 
         }
         else
@@ -99,8 +126,9 @@ public class HomeActivity extends AppCompatActivity
             textTitle.setText("COMPLETED PO");
             CompletedPoFragment myPhotosFragment = new CompletedPoFragment();
             getSupportFragmentManager().beginTransaction()
+
+                    .addToBackStack("AllVendorListFragment")
                     .replace(R.id.container, myPhotosFragment, "TAG")
-                    .addToBackStack("PendingPOFragment")
 
                     .commit();
 
@@ -110,8 +138,9 @@ public class HomeActivity extends AppCompatActivity
             textTitle.setText("VIEW DEFECTS");
             ViewDefectsFragment myPhotosFragment = new ViewDefectsFragment();
             getSupportFragmentManager().beginTransaction()
+                    .addToBackStack("AllVendorListFragment")
+
                     .replace(R.id.container, myPhotosFragment, "TAG")
-                    .addToBackStack("PendingPOFragment")
 
                     .commit();
 
@@ -121,8 +150,9 @@ public class HomeActivity extends AppCompatActivity
             textTitle.setText("REPORT");
             ReportFragment myPhotosFragment = new ReportFragment();
             getSupportFragmentManager().beginTransaction()
+                    .addToBackStack("AllVendorListFragment")
+
                     .replace(R.id.container, myPhotosFragment, "TAG")
-                    .addToBackStack("PendingPOFragment")
 
                     .commit();
 
@@ -133,8 +163,9 @@ public class HomeActivity extends AppCompatActivity
             textTitle.setText("NOTIFICATIONS & MESSAGES");
             NotificationandMessage myPhotosFragment = new NotificationandMessage();
             getSupportFragmentManager().beginTransaction()
+                    .addToBackStack("AllVendorListFragment")
+
                     .replace(R.id.container, myPhotosFragment, "TAG")
-                    .addToBackStack("PendingPOFragment")
 
                     .commit();
 
@@ -145,7 +176,6 @@ public class HomeActivity extends AppCompatActivity
 
 
         }
-
 
 
         return false;

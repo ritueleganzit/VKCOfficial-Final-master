@@ -58,7 +58,7 @@ public class CompletedPOActivity extends AppCompatActivity {
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 202;
     private ArrayList<String> mSelectPath;
 TextView pur_doc_num,article,doc_date;
-String txt_pur_doc_num,txt_article,txt_doc_date;
+String txt_pur_doc_num,txt_article,txt_doc_date,item;
     CallAPiActivity callAPiActivity;
     public static String URL_COMPLETE = "http://itechgaints.com/VKC-API/addDefect";
     ProgressDialog progressDialog;
@@ -80,7 +80,7 @@ String txt_pur_doc_num,txt_article,txt_doc_date;
         article=findViewById(R.id.article);
         txt_pur_doc_num=getIntent().getStringExtra("pur_doc_num");
         txt_article=getIntent().getStringExtra("article");
-        txt_doc_date=getIntent().getStringExtra("doc_date");
+        item=getIntent().getStringExtra("item");
         uploadlinear=findViewById(R.id.uploadlinear);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(CompletedPOActivity.this,LinearLayoutManager.VERTICAL,false);
         rc_production_complete.setLayoutManager(layoutManager);
@@ -92,7 +92,7 @@ String txt_pur_doc_num,txt_article,txt_doc_date;
                 startActivity(new Intent(CompletedPOActivity.this,HourlyCompleteActivity.class)
                 .putExtra("pur_doc_num",txt_pur_doc_num)
                 .putExtra("article",txt_article)
-                .putExtra("doc_date",txt_doc_date)
+                .putExtra("item",item)
 
 
 
@@ -170,7 +170,7 @@ getPOGridDetails();
     private void getPOGridDetails() {
 
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<PendingPoGridResponse> call = myInterface.pendingArticle(txt_pur_doc_num, txt_article, txt_doc_date);
+        Call<PendingPoGridResponse> call = myInterface.pendingArticle(txt_pur_doc_num, txt_article, item);
         call.enqueue(new Callback<PendingPoGridResponse>() {
             @Override
             public void onResponse(Call<PendingPoGridResponse> call, Response<PendingPoGridResponse> response) {
@@ -245,6 +245,7 @@ getPOGridDetails();
         Log.d("messageee",""+txt_article+" "+txt_pur_doc_num+" "+mSelectPath);
         map.put("pur_doc_num", txt_pur_doc_num);
         map.put("article", txt_article);
+        map.put("item", item);
 
         callAPiActivity.doPostWithFiles(CompletedPOActivity.this, map, URL_COMPLETE, mSelectPath, "image[]", new GetResponse() {
 

@@ -141,7 +141,8 @@ advance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
                     }
               else {
 
-                        searchData(edallpo.getText().toString(),edenddate.getText().toString(),ed_date.getText().toString(),ed_search.getText().toString());
+                  String art[]=edenddate.getText().toString().split("-");
+                        searchData(edallpo.getText().toString(),art[0],ed_date.getText().toString(),ed_search.getText().toString(),art[1]);
 d.dismiss();
                     }
 
@@ -493,7 +494,9 @@ ed_search.setText(searchData.getVendorName());
                 }
                 else
                 {
-                    searchData(edallpo.getText().toString(),edenddate.getText().toString(),"","");
+                    String art[]=edenddate.getText().toString().split("-");
+
+                    searchData(edallpo.getText().toString(),art[0],"","",art[1]);
                 }
             }
         });
@@ -531,24 +534,32 @@ ed_search.setText(searchData.getVendorName());
         }); edenddate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(articlelist.size()>0) {
+                if (articlelist!=null)
+                {
+                    if(articlelist.size()>0) {
 
-                    final ListAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, articlelist);
+                        final ListAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, articlelist);
 
-                    final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
+                        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
 
-                    builder.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
+                        builder.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
 
 
-                            edenddate.setText(articlelist.get(i));
+                                edenddate.setText(articlelist.get(i));
 
-                        }
-                    });
-                    builder.show();
+                            }
+                        });
+                        builder.show();
+                    }
                 }
+                else
+                {
+                    Toast.makeText(getActivity(), "No Article", Toast.LENGTH_SHORT).show();
+                }
+
             }
 
         });
@@ -557,11 +568,11 @@ ed_search.setText(searchData.getVendorName());
         return v;
     }
 
-    private void searchData(String toString, String toString1,String date,String vendor_id) {
+    private void searchData(String toString, String toString1,String date,String vendor_id,String item) {
         arrayList=new ArrayList();
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<SearchPOResponse> call=myInterface.completePoList(toString,toString1,date,vendor_id);
+        Call<SearchPOResponse> call=myInterface.completePoList(toString,toString1,date,vendor_id,item);
         call.enqueue(new Callback<SearchPOResponse>() {
             @Override
             public void onResponse(Call<SearchPOResponse> call, Response<SearchPOResponse> response) {
@@ -628,7 +639,7 @@ ed_search.setText(searchData.getVendorName());
                     {
                         for (int i=0;i<response.body().getData().size();i++)
                         {
-                            articlelist.add(response.body().getData().get(i).getArticle());
+                            articlelist.add(response.body().getData().get(i).getArticle()+"-"+response.body().getData().get(i).getItem());
                             Log.d("asfsdf",""+response.body().getData().get(i).getArticle());
                         }
                         edenddate.setText(articlelist.get(0));

@@ -58,8 +58,47 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isValid())
                 {
+                    if (Token!=null){
+                        loginUser();
+                    }
+                    else
+                    {
+                        Thread t=new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Token= FirebaseInstanceId.getInstance().getToken();
+                                if (Token!=null)
+                                {
+                                    Log.d("mytokenn", Token);
 
-                    loginUser();
+                                    device_token=Token;
+                                    StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().build();
+                                    StrictMode.setThreadPolicy(threadPolicy);
+                                    try {
+                                        JSONObject jsonObject=new JSONObject(Token);
+                                        Log.d("mytoken", jsonObject.getString("token"));
+                                        //devicetoken=jsonObject.getString("token");
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //getLoginBoth(Token);
+
+                                }
+                                else
+                                {
+
+                                }
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });t.start();
+                        loginUser();
+                    }
+
                 }
 
             }
@@ -150,6 +189,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 progressDialog.dismiss();
+                Log.d("dfddddddd",""+t.getMessage());
                 Toast.makeText(LoginActivity.this, "Server or Internet Error", Toast.LENGTH_SHORT).show();
             }
         });

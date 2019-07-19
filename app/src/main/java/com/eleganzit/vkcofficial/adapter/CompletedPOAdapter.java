@@ -46,7 +46,7 @@ public class CompletedPOAdapter extends RecyclerView.Adapter<CompletedPOAdapter.
         final SearchPO searchPO=campaigns.get(i);
         holder.vendor_name.setText(""+searchPO.getVendorName());
         holder.pur_doc_num.setText(""+searchPO.getPurDocNum());
-        holder.article.setText(""+searchPO.getArticle());
+        holder.article.setText(""+searchPO.getArticle()+"-"+searchPO.getItem());
         holder.doc_date.setText(""+searchPO.getDocDate()+"");
 holder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
@@ -54,7 +54,7 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
 context.startActivity(new Intent(context, CompletedPOActivity.class)
 .putExtra("pur_doc_num",searchPO.getPurDocNum())
 .putExtra("article",searchPO.getArticle())
-.putExtra("doc_date",searchPO.getDocDate())
+.putExtra("item",searchPO.getItem())
 
 );
 activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

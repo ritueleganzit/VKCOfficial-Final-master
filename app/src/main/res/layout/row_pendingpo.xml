@@ -35,32 +35,6 @@
                 android:padding="10dp"
                 >
 
-                <TableRow android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="50"
-                        android:text="Vendor Name"
-                        android:fontFamily="@font/poppins_regular"
-
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="50"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:gravity="end"
-                        android:id="@+id/vendor_name"
-                        android:fontFamily="@font/poppins_regular"
-                        android:ellipsize="end"
-                        android:text=""
-                        />
-
-
-                </TableRow>
 
                 <TableRow android:layout_marginBottom="5dp">
 

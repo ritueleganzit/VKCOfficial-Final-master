@@ -7,7 +7,7 @@
         android:id="@+id/grp1">
         <item
             android:id="@+id/nav_po"
-            android:title="PENDING PO" />
+            android:title="VENDORS" />
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/grp2">

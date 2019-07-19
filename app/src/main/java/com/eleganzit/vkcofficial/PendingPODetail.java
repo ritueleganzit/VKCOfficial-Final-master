@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class PendingPODetail extends AppCompatActivity {
     LinearLayout lin_nodata;
 
     ProgressDialog progressDialog;
-    String txt_pur_doc_num, article, doc_date;
+    String txt_pur_doc_num, article, doc_date,item;
     TextView pur_doc_num, number_of_stichers, articleline_number,startendtime;
     UserLoggedInSession userLoggedInSession;
 
@@ -48,6 +49,7 @@ public class PendingPODetail extends AppCompatActivity {
         txt_pur_doc_num = getIntent().getStringExtra("pur_doc_num");
         article = getIntent().getStringExtra("article");
         doc_date = getIntent().getStringExtra("doc_date");
+        item = getIntent().getStringExtra("item");
 
         rc_production_complete = findViewById(R.id.rc_production_complete);
         hourly = findViewById(R.id.hourly);
@@ -68,6 +70,7 @@ public class PendingPODetail extends AppCompatActivity {
                 startActivity(new Intent(PendingPODetail.this, HourlyProductionActivity.class)
                         .putExtra("pur_doc_num",txt_pur_doc_num)
                         .putExtra("article",article)
+                        .putExtra("item",item)
                         .putExtra("doc_date",doc_date));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
@@ -86,10 +89,10 @@ public class PendingPODetail extends AppCompatActivity {
     }
 
     private void getPOGridDetails() {
-
+Log.d("sfsfsf",""+item+" "+txt_pur_doc_num+" "+article+" "+item);
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<PendingPoGridResponse> call = myInterface.pendingArticle(txt_pur_doc_num, article);
+        Call<PendingPoGridResponse> call = myInterface.pendingPoDetails(txt_pur_doc_num, article,item);
         call.enqueue(new Callback<PendingPoGridResponse>() {
             @Override
             public void onResponse(Call<PendingPoGridResponse> call, Response<PendingPoGridResponse> response) {
