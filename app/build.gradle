@@ -8,7 +8,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        project.ext.set("archivesBaseName", "VKCOffical-19-07-2019")
+        project.ext.set("archivesBaseName", "VKCOffical-22-07-2019")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
