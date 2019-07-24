@@ -7,6 +7,12 @@ public class AllPO {
     @SerializedName("pur_doc_num")
     @Expose
     private String purDocNum;
+    @SerializedName("vendor_name")
+    @Expose
+    private String vendorName;
+    @SerializedName("date")
+    @Expose
+    private String date;
 
     public String getPurDocNum() {
         return purDocNum;
@@ -15,4 +21,21 @@ public class AllPO {
     public void setPurDocNum(String purDocNum) {
         this.purDocNum = purDocNum;
     }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
 }

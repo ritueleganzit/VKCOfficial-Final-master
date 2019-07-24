@@ -282,7 +282,7 @@ public class JSONParser {
             }
             for (int i = 0; i < imageList.size(); i++) {
                 File f = new File(imageList.get(i));
-                f = saveBitmapToFile(f);
+               // f = saveBitmapToFile(f);
 
                 Log.e("File Name 322", f.getName() + "===========");
                 if (f.exists()) {

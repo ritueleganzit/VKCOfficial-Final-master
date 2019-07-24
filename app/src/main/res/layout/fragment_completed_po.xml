@@ -55,6 +55,35 @@
                     android:backgroundTint="@color/gray"
                     android:inputType="date"
                     android:focusable="false"
+                    android:id="@+id/edvendor"
+                    android:singleLine="true"
+                    android:drawableRight="@drawable/ic_downarrow"
+
+                    android:imeOptions="actionNext"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_height="wrap_content"
+                    android:hint="Vendor"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_centerVertical="true"
+                android:theme="@style/TextLabel"
+                android:textColorHint="@color/gray"
+                android:backgroundTint="@color/gray"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColorHint="@color/gray"
+                    android:backgroundTint="@color/gray"
+                    android:inputType="date"
+                    android:focusable="false"
                     android:id="@+id/edallpo"
                     android:singleLine="true"
                     android:drawableRight="@drawable/ic_downarrow"

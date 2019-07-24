@@ -1,13 +1,17 @@
 package com.eleganzit.vkcofficial.fragment;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -37,13 +41,17 @@ import android.widget.Toast;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.eleganzit.vkcofficial.HomeActivity;
+import com.eleganzit.vkcofficial.PendingPODetail;
 import com.eleganzit.vkcofficial.R;
 import com.eleganzit.vkcofficial.adapter.CompletedPOAdapter;
+import com.eleganzit.vkcofficial.adapter.PendingPOAdapter;
 import com.eleganzit.vkcofficial.adapter.SearchAdapter;
 import com.eleganzit.vkcofficial.api.RetrofitAPI;
 import com.eleganzit.vkcofficial.api.RetrofitInterface;
 import com.eleganzit.vkcofficial.model.AllArticleResponse;
+import com.eleganzit.vkcofficial.model.AllPO;
 import com.eleganzit.vkcofficial.model.AllPOResponse;
+import com.eleganzit.vkcofficial.model.PendingPO;
 import com.eleganzit.vkcofficial.model.SearchData;
 import com.eleganzit.vkcofficial.model.SearchDataResponse;
 import com.eleganzit.vkcofficial.model.SearchPO;
@@ -51,8 +59,11 @@ import com.eleganzit.vkcofficial.model.SearchPOResponse;
 import com.eleganzit.vkcofficial.util.LinearLayoutManagerWrapper;
 import com.eleganzit.vkcofficial.util.UserLoggedInSession;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -78,11 +89,13 @@ ArrayList<SearchPO> arrayList;
     }
     List<String> stateArrayList=new ArrayList();
     List<String> stateArrayListnum=new ArrayList();
-    TextInputEditText edenddate;
+    TextInputEditText edenddate,edvendor;
     String vendor_id,date;
     UserLoggedInSession userLoggedInSession;
     List<String> articlelist;
 CheckBox advance;
+     RecyclerView rc_search;
+String searchdate,searchname,vendornamee;
     List<SearchData> searchList;
     private int mYear, mMonth, mDay, mHour, mMinute;
     SearchAdapter searchAdapter;
@@ -101,108 +114,83 @@ CheckBox advance;
         advance=v.findViewById(R.id.advance);
         rc_completed_list=v.findViewById(R.id.rc_completed_list);
         edallpo=v.findViewById(R.id.edallpo);
+        edvendor=v.findViewById(R.id.edvendor);
         save=v.findViewById(R.id.save);
         edenddate=v.findViewById(R.id.edenddate);
         userLoggedInSession = new UserLoggedInSession(getActivity());
-advance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked)
-        {
-            final Dialog d=new Dialog(getActivity(),
-                    R.style.Theme_Dialog);
-            d.setContentView(R.layout.advancesearch);
-            final EditText ed_search=d.findViewById(R.id.ed_search);
-            final EditText ed_date=d.findViewById(R.id.ed_date);;
-            TextView cancel,ok;
-            final String[] userInput = new String[1];
-            final RecyclerView rc_search;
+        edvendor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            cancel=d.findViewById(R.id.cancel);
-            ok=d.findViewById(R.id.ok);
-            cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    advance.setChecked(false);
-                    d.dismiss();
-                }
-            });
+                final Dialog d=new Dialog(getActivity(),
+                        R.style.Theme_Dialog);
+                d.setContentView(R.layout.vendorsearch);
+                final EditText ed_search=d.findViewById(R.id.ed_search);
+                TextView cancel,ok;
+                final String[] userInput = new String[1];
+                final RecyclerView rc_search;
 
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ed_search.getText().toString().equals("")) {
-
-                        YoYo.with(Techniques.Shake).duration(700).repeat(0).playOn(ed_search);
-
-                    } else if (ed_date.getText().toString().equals("")) {
-
-                        YoYo.with(Techniques.Shake).duration(700).repeat(0).playOn(ed_date);
+                cancel=d.findViewById(R.id.cancel);
+                ok=d.findViewById(R.id.ok);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        advance.setChecked(false);
+                        d.dismiss();
                     }
-              else {
+                });
 
-                  String art[]=edenddate.getText().toString().split("-");
-                        searchData(edallpo.getText().toString(),art[0],ed_date.getText().toString(),ed_search.getText().toString(),art[1]);
-d.dismiss();
-                    }
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ed_search.getText().toString().equals("")) {
 
+                            YoYo.with(Techniques.Shake).duration(700).repeat(0).playOn(ed_search);
 
-                }
-            });
-            ed_date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                        }
+                        else {
+                            edvendor.setText(vendornamee);
+getPOLine();
+                            String art[]=edenddate.getText().toString().split("-");
+                            //searchname=ed_search.getText().toString();
+                            //searchData(edallpo.getText().toString(),art[0],ed_date.getText().toString(),searchname,art[1]);
+                            d.dismiss();
+                        }
 
-                    final Calendar c = Calendar.getInstance();
-                    mYear = c.get(Calendar.YEAR);
-                    mMonth = c.get(Calendar.MONTH);
-                    mDay = c.get(Calendar.DAY_OF_MONTH);
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                            new DatePickerDialog.OnDateSetListener() {
-
-                                @Override
-                                public void onDateSet(DatePicker view, int year,
-                                                      int monthOfYear, int dayOfMonth) {
-
-                                    ed_date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                    date=ed_date.getText().toString();
-
-                                }
-                            }, mYear, mMonth, mDay);
-                    datePickerDialog.show();
 
                     }
-            });
-            RecyclerView.LayoutManager layoutManager1=new LinearLayoutManagerWrapper(getActivity(),LinearLayoutManager.VERTICAL,false);
-            rc_search=d.findViewById(R.id.rc_search);
+                });
 
-            rc_search.setLayoutManager(layoutManager1);
-            rc_search.setItemAnimator(new DefaultItemAnimator());
+                RecyclerView.LayoutManager layoutManager1=new LinearLayoutManagerWrapper(getActivity(),LinearLayoutManager.VERTICAL,false);
+                rc_search=d.findViewById(R.id.rc_search);
 
-            searchList = new ArrayList<>();
+                rc_search.setLayoutManager(layoutManager1);
+                rc_search.setItemAnimator(new DefaultItemAnimator());
 
-            searchAdapter = new SearchAdapter(searchList, getActivity(), new SearchAdapter.SearchAdapterListener() {
-                @Override
-                public void onSearchSelected(SearchData searchData) {
-                }
-            });
-            rc_search.setAdapter(searchAdapter);
+                searchList = new ArrayList<>();
 
-            ed_search.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchAdapter = new SearchAdapter(searchList, getActivity(), new SearchAdapter.SearchAdapterListener() {
+                    @Override
+                    public void onSearchSelected(SearchData searchData) {
+                    }
+                });
+                rc_search.setAdapter(searchAdapter);
 
-                }
+                ed_search.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                @Override
-                public void onTextChanged(final CharSequence charSequence, final int i, int i1, int i2) {
-
-                    // user is typing: reset already started timer (if existing)
-                    if (timer != null) {
-                        timer.cancel();
                     }
 
-                    userInput[0] =charSequence.toString();
+                    @Override
+                    public void onTextChanged(final CharSequence charSequence, final int i, int i1, int i2) {
+
+                        // user is typing: reset already started timer (if existing)
+                        if (timer != null) {
+                            timer.cancel();
+                        }
+
+                        userInput[0] =charSequence.toString();
 /*
                 if(!userInput.isEmpty())
                 {
@@ -300,177 +288,269 @@ d.dismiss();
                     searchAdapter.notifyDataSetChanged();
                     rc_search.setVisibility(View.GONE);
                 }*/
-                    //Toast.makeText(getActivity(), "onTextChanged  "+ed_search.getText().toString().isEmpty(), Toast.LENGTH_SHORT).show();
-                    Log.d("whrrrrrr","onTextChanged  "+ed_search.getText().toString().isEmpty());
-                }
+                        //Toast.makeText(getActivity(), "onTextChanged  "+ed_search.getText().toString().isEmpty(), Toast.LENGTH_SHORT).show();
+                        Log.d("whrrrrrr","onTextChanged  "+ed_search.getText().toString().isEmpty());
+                    }
 
-                @Override
-                public void afterTextChanged(final Editable editable) {
+                    @Override
+                    public void afterTextChanged(final Editable editable) {
 
 
-                    // user typed: start the timer
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
+                        // user typed: start the timer
+                        timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // do your actual work here
-                                    userInput[0] =editable.toString();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // do your actual work here
+                                        userInput[0] =editable.toString();
 
-                                    if(!userInput[0].isEmpty())
-                                    {
-                                        rc_search.setVisibility(View.VISIBLE);
+                                        if(!userInput[0].isEmpty())
+                                        {
+                                            rc_search.setVisibility(View.VISIBLE);
 
-                                        RetrofitInterface myInterface= RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-                                        Call<SearchDataResponse> call=myInterface.serchVendorList(ed_search.getText().toString());
-                                        call.enqueue(new Callback<SearchDataResponse>() {
-                                            @Override
-                                            public void onResponse(Call<SearchDataResponse> call, final Response<SearchDataResponse> response) {
+                                            RetrofitInterface myInterface= RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
+                                            Call<SearchDataResponse> call=myInterface.serchVendorList(ed_search.getText().toString());
+                                            call.enqueue(new Callback<SearchDataResponse>() {
+                                                @Override
+                                                public void onResponse(Call<SearchDataResponse> call, final Response<SearchDataResponse> response) {
 
-                                                if(response.isSuccessful()) {
-                                                    Log.d("whereeeeeeeeee", "     onresponse ");
+                                                    if(response.isSuccessful()) {
+                                                        Log.d("whereeeeeeeeee", "     onresponse ");
 
-                                                    //Toast.makeText(getActivity(), ""+response.body().getStatus().toString(), Toast.LENGTH_SHORT).show();
+                                                        //Toast.makeText(getActivity(), ""+response.body().getStatus().toString(), Toast.LENGTH_SHORT).show();
 
-                                                    if(response.body()!=null)
-                                                    {
-                                                        Log.d("whereeeeeeeeee", "   response is not null   ");
-
-                                                        if(searchList.size()>0)
+                                                        if(response.body()!=null)
                                                         {
-                                                            Log.d("whereeeeeeeeee", "   list size was greater than 0   ");
+                                                            Log.d("whereeeeeeeeee", "   response is not null   ");
 
-                                                            searchList.clear();
-                                                        }
-                                                        if(response.body().getData()!=null)
-                                                        {
-                                                            Log.d("whereeeeeeeeee", "   response body data list is not null   ");
-                                                            if(response.body().getStatus().toString().equalsIgnoreCase("1"))
+                                                            if(searchList.size()>0)
                                                             {
-                                                                for(int i=0; i<response.body().getData().size();i++)
+                                                                Log.d("whereeeeeeeeee", "   list size was greater than 0   ");
+
+                                                                searchList.clear();
+                                                            }
+                                                            if(response.body().getData()!=null)
+                                                            {
+                                                                Log.d("whereeeeeeeeee", "   response body data list is not null   ");
+                                                                if(response.body().getStatus().toString().equalsIgnoreCase("1"))
                                                                 {
+                                                                    for(int i=0; i<response.body().getData().size();i++)
+                                                                    {
                                                                         SearchData searchData = new SearchData(response.body().getData().get(i).getVendorId(), response.body().getData().get(i).getVendorName());
                                                                         searchList.add(searchData);
                                                                         Log.d("whereeeeeeeeee", "      " + searchList.size());
                                                                     }
 
 
-                                                                rc_search.getAdapter().notifyDataSetChanged();
+                                                                    rc_search.getAdapter().notifyDataSetChanged();
+                                                                }
+                                                                else
+                                                                {
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            //android.widget.Toast.makeText(CreatePostActivity.this, contactList.size()+"    if switch open suggestion", Toast.LENGTH_SHORT).show();
-                                                            searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
-                                                                @Override
-                                                                public void onSearchSelected(SearchData searchData) {
-                                                                    ed_search.setText("");
-                                                                    ed_search.append(searchData.getVendorName()+"");
+                                                                //android.widget.Toast.makeText(CreatePostActivity.this, contactList.size()+"    if switch open suggestion", Toast.LENGTH_SHORT).show();
+                                                                searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
+                                                                    @Override
+                                                                    public void onSearchSelected(SearchData searchData) {
+                                                                        ed_search.setText("");
+                                                                        ed_search.append(searchData.getVendorName()+"");
 
+                                                                        Log.d("whereeeeeeeeee", "calledd");
+
+
+                                                                    }
+                                                                });
+
+                                                                if(!userInput[0].isEmpty())
+                                                                {
+
+                                                                    Log.d("wwwwwwwwwwwwww", userInput[0] +"");
+                                                                    rc_search.getRecycledViewPool().clear();
+                                                                    rc_search.setAdapter(searchAdapter);
+                                                                    searchAdapter.getFilter().filter(userInput[0]);
+                                                                    searchAdapter.notifyDataSetChanged();
                                                                 }
-                                                            });
-
-                                                            if(!userInput[0].isEmpty())
-                                                            {
-
-                                                                Log.d("wwwwwwwwwwwwww", userInput[0] +"");
-                                                                rc_search.getRecycledViewPool().clear();
-                                                                rc_search.setAdapter(searchAdapter);
-                                                                searchAdapter.getFilter().filter(userInput[0]);
-                                                                searchAdapter.notifyDataSetChanged();
                                                             }
-                                                        }
-                                                        if (searchList.size() > 0) {
-                                                            Log.d("whereeeeeeeeee", " dsf     "+searchList.size());
+                                                            if (searchList.size() > 0) {
+                                                                Log.d("whereeeeeeeeee", " dsf     "+searchList.size());
 
-                                                            //android.widget.Toast.makeText(CreatePostActivity.this, contactList.size()+"    if switch open suggestion", Toast.LENGTH_SHORT).show();
-                                                            searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
-                                                                @Override
-                                                                public void onSearchSelected(SearchData searchData) {
-                                                                    ed_search.setText("");
-                                                                    ed_search.append(searchData.getVendorName()+"");
+                                                                //android.widget.Toast.makeText(CreatePostActivity.this, contactList.size()+"    if switch open suggestion", Toast.LENGTH_SHORT).show();
+                                                                searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
+                                                                    @Override
+                                                                    public void onSearchSelected(SearchData searchData) {
+                                                                        ed_search.setText("");
+                                                                        ed_search.append(searchData.getVendorName()+"");
+                                                                        searchname=searchData.getVendorId();
+                                                                        vendornamee=searchData.getVendorName();
+                                                                        Log.d("whereeeeeeeeee", " called  cgcgb   "+searchname);
 
+
+                                                                    }
+                                                                });
+
+                                                                if(!userInput[0].isEmpty())
+                                                                {
+
+                                                                    Log.d("wwwwwwwwwwwwww", userInput[0] +"");
+                                                                    rc_search.getRecycledViewPool().clear();
+                                                                    rc_search.setAdapter(searchAdapter);
+                                                                    searchAdapter.getFilter().filter(userInput[0]);
+                                                                    searchAdapter.notifyDataSetChanged();
                                                                 }
-                                                            });
 
-                                                            if(!userInput[0].isEmpty())
-                                                            {
+                                                            } else {
+                                                                Log.d("whereeeeeeeeee", "      switch case '@' in else");
 
-                                                                Log.d("wwwwwwwwwwwwww", userInput[0] +"");
-                                                                rc_search.getRecycledViewPool().clear();
-                                                                rc_search.setAdapter(searchAdapter);
-                                                                searchAdapter.getFilter().filter(userInput[0]);
-                                                                searchAdapter.notifyDataSetChanged();
                                                             }
-
-                                                        } else {
-                                                            Log.d("whereeeeeeeeee", "      switch case '@' in else");
 
                                                         }
 
                                                     }
-
+                                                    else
+                                                    {
+                                                        Log.d("whereeeeeeeeee", "   "+response.errorBody());
+                                                        Toast.makeText(getActivity(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    Log.d("whereeeeeeeeee", "   "+response.errorBody());
+
+                                                @Override
+                                                public void onFailure(Call<SearchDataResponse> call, Throwable t) {
                                                     Toast.makeText(getActivity(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
                                                 }
-                                            }
+                                            });
 
-                                            @Override
-                                            public void onFailure(Call<SearchDataResponse> call, Throwable t) {
-                                                Toast.makeText(getActivity(), "Server or Internet Error", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                        }
+                                        else
+                                        {
+                                            // Toast.makeText(getActivity(), "empty", Toast.LENGTH_SHORT).show();
 
+                                            searchList.clear();
+                                            searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
+                                                @Override
+                                                public void onSearchSelected(SearchData searchData) {
+                                                    ed_search.setText(searchData.getVendorName());
+                                                    Log.d("whereeeeeeeeee", " calledzzv");
+
+
+                                                }
+                                            });
+                                            rc_search.getRecycledViewPool().clear();
+                                            rc_search.setAdapter(searchAdapter);
+                                            searchAdapter.getFilter().filter(userInput[0]);
+                                            searchAdapter.notifyDataSetChanged();
+                                            rc_search.setVisibility(View.GONE);
+                                        }
                                     }
-                                    else
-                                    {
-                                       // Toast.makeText(getActivity(), "empty", Toast.LENGTH_SHORT).show();
-
-                                        searchList.clear();
-                                        searchAdapter = new SearchAdapter(searchList,getActivity(), new SearchAdapter.SearchAdapterListener() {
-                                            @Override
-                                            public void onSearchSelected(SearchData searchData) {
-ed_search.setText(searchData.getVendorName());
-                                            //    Toast.makeText(getActivity(), ""+searchData.getVendorId(), Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
-                                        rc_search.getRecycledViewPool().clear();
-                                        rc_search.setAdapter(searchAdapter);
-                                        searchAdapter.getFilter().filter(userInput[0]);
-                                        searchAdapter.notifyDataSetChanged();
-                                        rc_search.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
+                                });
 
 
-                        }
-                    }, 600); // 600ms delay before the timer executes the „run“ method from TimerTask
+                            }
+                        }, 600); // 600ms delay before the timer executes the „run“ method from TimerTask
 
-                }
-            });
-
-
-            ed_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                       // performSearch();
-                        return true;
                     }
-                    return false;
+                });
+
+
+                ed_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            // performSearch();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                d.show();
+
+            }
+        });
+advance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked)
+        {
+            final Dialog d=new Dialog(getActivity(),
+                    R.style.Theme_Dialog);
+            d.setContentView(R.layout.advancesearch);
+            final EditText ed_date=d.findViewById(R.id.ed_date);;
+            TextView cancel,ok;
+            final String[] userInput = new String[1];
+            final RecyclerView rc_search;
+
+            cancel=d.findViewById(R.id.cancel);
+            ok=d.findViewById(R.id.ok);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    advance.setChecked(false);
+                    d.dismiss();
                 }
             });
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                     if (ed_date.getText().toString().equals("")) {
+
+                        YoYo.with(Techniques.Shake).duration(700).repeat(0).playOn(ed_date);
+                    }
+              else {
+
+                  String art[]=edenddate.getText().toString().split("-");
+                  searchdate=ed_date.getText().toString();
+                  //searchname=ed_search.getText().toString();
+                      //  searchData(edallpo.getText().toString(),art[0],ed_date.getText().toString(),searchname,art[1]);
+d.dismiss();
+                    }
+
+
+                }
+            });
+            ed_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    final Calendar c = Calendar.getInstance();
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                            new DatePickerDialog.OnDateSetListener() {
+
+                                @Override
+                                public void onDateSet(DatePicker view, int year,
+                                                      int monthOfYear, int dayOfMonth) {
+
+
+                                    int month= monthOfYear+1;
+                                    String fm=""+month;
+                                    String fd=""+dayOfMonth;
+                                    if(month<10){
+                                        fm ="0"+month;
+                                    }
+                                    if (dayOfMonth<10){
+                                        fd="0"+dayOfMonth;
+                                    }
+                                    ed_date.setText(fd + "-" + (fm) + "-" + year);
+                                    date=ed_date.getText().toString();
+
+                                }
+                            }, mYear, mMonth, mDay);
+                    datePickerDialog.show();
+
+                    }
+            });
+
+
+
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             d.show();
 
@@ -495,14 +575,23 @@ ed_search.setText(searchData.getVendorName());
                 else
                 {
                     String art[]=edenddate.getText().toString().split("-");
+                        if (advance.isChecked())
+                        {
+                            searchData(edallpo.getText().toString(),art[0],searchdate,searchname,art[1]);
 
-                    searchData(edallpo.getText().toString(),art[0],"","",art[1]);
+                        }
+                        else {
+                            searchData(edallpo.getText().toString(), art[0], "", searchname, art[1]);
+                        }
                 }
             }
         });
         edallpo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
 
                 if (stateArrayList.size()>0) {
                     final ListAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, stateArrayList);
@@ -563,12 +652,14 @@ ed_search.setText(searchData.getVendorName());
             }
 
         });
-        getPOLine();
+    //    getPOLine();
 
         return v;
     }
 
     private void searchData(String toString, String toString1,String date,String vendor_id,String item) {
+
+        Log.d("ffffffffffff",""+toString+" "+toString1+" "+date+" "+vendor_id+" "+item);
         arrayList=new ArrayList();
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
@@ -664,7 +755,7 @@ ed_search.setText(searchData.getVendorName());
     private void getPOLine() {
         progressDialog.show();
         RetrofitInterface myInterface = RetrofitAPI.getRetrofit().create(RetrofitInterface.class);
-        Call<AllPOResponse> call=myInterface.allPoNumber();
+        Call<AllPOResponse> call=myInterface.allPoNumber(searchname);
         call.enqueue(new Callback<AllPOResponse>() {
             @Override
             public void onResponse(Call<AllPOResponse> call, Response<AllPOResponse> response) {
@@ -678,15 +769,16 @@ ed_search.setText(searchData.getVendorName());
 
                             Log.d("stattelist","--"+response.body().getData().get(i).getPurDocNum()    );
 
+
                             stateArrayList.add(response.body().getData().get(i).getPurDocNum());
-                           //stateArrayListnum.add(response.body().getData().get(i).getLineId());
 
 
                         }
-
-
                         edallpo.setText(stateArrayList.get(0));
-                       assignArticle(""+stateArrayList.get(0));
+
+                        assignArticle(stateArrayList.get(0));
+
+
                     }
 
 
@@ -706,6 +798,9 @@ ed_search.setText(searchData.getVendorName());
         HomeActivity.textTitle.setText("COMPLETED PO");
 
     }
+
+
+
 
 
 }

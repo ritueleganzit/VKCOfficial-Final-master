@@ -125,8 +125,10 @@ public interface RetrofitInterface {
     );
 
 
+    @FormUrlEncoded
     @POST("/VKC-API/allPoNumber")
     Call<AllPOResponse> allPoNumber   (
+            @Field("vendor_id") String vendorid
 
 
 
