@@ -298,9 +298,10 @@ getPOGridDetails();
         } else {
 
             MultiImageSelector selector = MultiImageSelector.create(CompletedPOActivity.this);
+            selector.showCamera(true);
+
             selector.multi();
             selector.count(6);
-            selector.showCamera(false);
 
             selector.origin(mSelectPath);
             selector.start(CompletedPOActivity.this, REQUEST_IMAGE);

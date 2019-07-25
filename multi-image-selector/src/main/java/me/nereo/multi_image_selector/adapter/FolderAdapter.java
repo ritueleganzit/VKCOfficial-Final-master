@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.provider.PicassoProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public class FolderAdapter extends BaseAdapter {
                 if(mFolders.size()>0){
                     Folder f = mFolders.get(0);
                     if (f != null) {
-                        PicassoProvider.get()
+                        Picasso.with(mContext)
                                 .load(new File(f.cover.path))
                                 .error(R.drawable.mis_default_error)
                                 .resizeDimen(R.dimen.mis_folder_cover_size, R.dimen.mis_folder_cover_size)
@@ -158,7 +157,7 @@ public class FolderAdapter extends BaseAdapter {
             }
             if (data.cover != null) {
                 // 显示图片
-                PicassoProvider.get()
+                Picasso.with(mContext)
                         .load(new File(data.cover.path))
                         .placeholder(R.drawable.mis_default_error)
                         .resizeDimen(R.dimen.mis_folder_cover_size, R.dimen.mis_folder_cover_size)

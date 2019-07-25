@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.provider.PicassoProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import me.nereo.multi_image_selector.bean.Image;
  * Updated by nereo on 2016/1/19.
  */
 public class ImageGridAdapter extends BaseAdapter {
-
     private static final int TYPE_CAMERA = 0;
     private static final int TYPE_NORMAL = 1;
 
@@ -205,15 +203,15 @@ public class ImageGridAdapter extends BaseAdapter {
 
         void bindData(final Image data){
             if(data == null) return;
-
+            // 处理单选和多选状态
             if(showSelectIndicator){
                 indicator.setVisibility(View.VISIBLE);
                 if(mSelectedImages.contains(data)){
-
+                    // 设置选中状态
                     indicator.setImageResource(R.drawable.mis_btn_selected);
                     mask.setVisibility(View.VISIBLE);
                 }else{
-
+                    // 未选择
                     indicator.setImageResource(R.drawable.mis_btn_unselected);
                     mask.setVisibility(View.GONE);
                 }
@@ -222,18 +220,16 @@ public class ImageGridAdapter extends BaseAdapter {
             }
             File imageFile = new File(data.path);
             if (imageFile.exists()) {
-
-                PicassoProvider.get()
+                // 显示图片
+                Picasso.with(mContext)
                         .load(imageFile)
                         .placeholder(R.drawable.mis_default_error)
                         .tag(MultiImageSelectorFragment.TAG)
                         .resize(mGridWidth, mGridWidth)
                         .centerCrop()
                         .into(image);
-            }else{
                 image.setImageResource(R.drawable.mis_default_error);
             }
         }
     }
-
 }
